@@ -1,13 +1,12 @@
-import React, { Consumer } from 'react';
+import React from 'react';
+import Job from '../models/Job';
 import styles from "../styles/NewJob.module.css";
 
 interface Props {
-  message: string;
-  num: number;
+  addJob(job: Job): void;
 }
 
 const NewJob = (props: Props) => {
-  // Will take in a function to add a new job
   
   return (
     <div className={styles.background}>
@@ -20,7 +19,14 @@ const NewJob = (props: Props) => {
       <div>
         <input type="text" className="reason" placeholder="Reason"></input>
       </div>
-      <button>Add</button>
+      <button onClick={() => props.addJob({
+        key: Math.random(),
+        company: '',
+        resume: '',
+        applied: '',
+        reason: '',
+        appUrl: ''
+      })}>Add</button>
     </div>
   );
 };
