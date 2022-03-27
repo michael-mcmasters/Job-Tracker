@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import Job from '../models/Job';
 import styles from "../styles/NewJob.module.css";
 
@@ -6,34 +6,42 @@ interface Props {
   addJob(job: Job): void;
 }
 
+interface UserInput {
+  company: string;
+  resume: string;
+  applied: string;
+  appUrl: string;
+  reason: string;
+}
+
 const NewJob = (props: Props) => {
   
-  // This is a quick implementation.
-  // In future, put these into 1 object. And don't use useState because page doesn't need to re-render when values update.
-  const [companyInput, setCompanyInput] = useState("");
-  const [resumeInput, setResumeInput ] = useState("");
-  const [appliedInput, setAppliedInput] = useState("");
-  const [appUrlInput, setAppUrlInput] = useState("");
-  const [reasonInput, setReasonInput] = useState("");
+  const userInputRef = useRef<UserInput>({
+    company: '',
+    resume: '',
+    applied: '',
+    appUrl: '',
+    reason: ''
+  });
   
   return (
     <div className={styles.background}>
       <div className="input-container">
-        <input type="text" placeholder="Company" onChange={e => setCompanyInput(e.target.value)}></input>
-        <input type="text" placeholder="Resume" onChange={e => setResumeInput(e.target.value)}></input>
-        <input type="text" placeholder="Applied" onChange={e => setAppliedInput(e.target.value)}></input>
-        <input type="text" placeholder="App URL" onChange={e => setAppUrlInput(e.target.value)}></input>
+        <input type="text" placeholder="Company" onChange={e => userInputRef.current.company = e.target.value}></input>
+        <input type="text" placeholder="Resume" onChange={e => userInputRef.current.resume = e.target.value}></input>
+        <input type="text" placeholder="Applied" onChange={e => userInputRef.current.applied = e.target.value}></input>
+        <input type="text" placeholder="App URL" onChange={e => userInputRef.current.appUrl = e.target.value}></input>
       </div>
       <div>
-        <input type="text" className="reason" placeholder="Reason" onChange={e => setReasonInput(e.target.value)}></input>
+        <input type="text" className="reason" placeholder="Reason" onChange={e => userInputRef.current.reason = e.target.value}></input>
       </div>
       <button onClick={() => props.addJob({
         key: Math.random(),
-        company: companyInput,
-        resume: resumeInput,
-        applied: appliedInput,
-        reason: reasonInput,
-        appUrl: appUrlInput
+        company: userInputRef.current.company,
+        resume: userInputRef.current.resume,
+        applied: userInputRef.current.applied,
+        reason: userInputRef.current.reason,
+        appUrl: userInputRef.current.appUrl
       })}>Add</button>
     </div>
   );
