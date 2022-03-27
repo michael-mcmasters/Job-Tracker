@@ -14,9 +14,22 @@ class UserInput {
   reason: string = '';
 }
 
+
 const NewJob = (props: Props) => {
   
   const userInput = useRef<UserInput>(new UserInput());
+  
+  function userInputToJob(userInput: UserInput) {
+    const newJob: Job = {
+      key: Math.random(),
+      company: userInput.company,
+      resume: userInput.resume,
+      applied: userInput.applied,
+      reason: userInput.reason,
+      appUrl: userInput.appUrl
+    };
+    props.addJob(newJob);
+  }
   
   return (
     <div className={styles.background}>
@@ -29,14 +42,7 @@ const NewJob = (props: Props) => {
       <div>
         <input type="text" className="reason" placeholder="Reason" onChange={e => userInput.current.reason = e.target.value}></input>
       </div>
-      <button onClick={() => props.addJob({
-        key: Math.random(),
-        company: userInput.current.company,
-        resume: userInput.current.resume,
-        applied: userInput.current.applied,
-        reason: userInput.current.reason,
-        appUrl: userInput.current.appUrl
-      })}>Add</button>
+      <button onClick={() => userInputToJob(userInput.current)}>Add</button>
     </div>
   );
 };
