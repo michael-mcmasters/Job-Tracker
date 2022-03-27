@@ -1,12 +1,12 @@
 import React, { Consumer } from 'react';
 import styles from "../styles/NewJob.module.css";
 
-interface ChildProps {
+interface Props {
   message: string;
   num: number;
 }
 
-const NewJob = (props: ChildProps) => {
+const NewJob = (props: Props) => {
   // Will take in a function to add a new job
   
   return (
