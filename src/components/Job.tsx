@@ -1,5 +1,5 @@
 import React from 'react';
-import "../styles/Job.css"
+import styles from "../styles/Job.module.css";
 
 interface Job {
   company: string;
@@ -11,12 +11,15 @@ interface Job {
 
 const Job = (props: Job) => {
   return (
-    <div className="background">
-      {props.company}
-      {props.resume}
-      {props.applied}
-      {props.reason}
-      {props.appUrl}
+    <div className={styles.background}>
+      
+      <span>{props.company}</span>
+      <span>{props.resume}</span>
+      <span>{props.applied}</span>
+      <span>{props.reason}</span>
+      <p>
+        <span>{props.appUrl}</span>
+      </p>
     </div>
   );
 };

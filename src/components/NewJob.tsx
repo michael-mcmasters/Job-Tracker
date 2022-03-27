@@ -1,5 +1,5 @@
 import React, { Consumer } from 'react';
-import "../styles/NewJob.css";
+import styles from "../styles/NewJob.module.css";
 
 interface ChildProps {
   message: string;
@@ -10,7 +10,7 @@ const NewJob = (props: ChildProps) => {
   // Will take in a function to add a new job
   
   return (
-    <div className="background">
+    <div className={styles.background}>
       <div className="input-container">
         <input type="text" placeholder="Company"></input>
         <input type="text" placeholder="Resume"></input>

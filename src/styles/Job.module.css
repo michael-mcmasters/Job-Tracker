@@ -3,4 +3,10 @@
   background-color: #0E3B43;
   padding: 1rem;
   border-radius: 1rem;
+  color: white;
+  text-align: left;
+}
+
+span {
+  margin: 1rem;
 }
