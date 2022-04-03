@@ -58,6 +58,20 @@ function App() {
   
   function addJob(job: Job): void {
     setJobsArr([...jobsArr, job])
+    
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "text/plain");
+
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.stringify(job)
+    };
+    
+    fetch("https://igefue8jt4.execute-api.us-east-1.amazonaws.com/", requestOptions)
+      .then(response => response.text())
+      .then(result => console.log("API Result is " + result))
+      .catch(error => console.log('error', error));
   }
   
   return (
