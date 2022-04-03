@@ -59,6 +59,10 @@ function App() {
   function addJob(job: Job): void {
     setJobsArr([...jobsArr, job])
     
+    if (!fetchRealAPI)
+      return;
+    
+      
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "text/plain");
 
