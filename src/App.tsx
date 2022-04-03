@@ -4,7 +4,7 @@ import NewJob from './components/NewJob';
 import JobEntries from './components/JobEntries';
 import Job from './models/Job';
 
-const fetchRealAPI = process.env.REACT_APP_FETCH_REAL_API === "true" ? true : false;
+const fetchRealAPI = process.env.REACT_APP_FETCH_REAL_API === "true" ? true : false
 
 function App() {
   
@@ -20,8 +20,7 @@ function App() {
       .then((res) => res.json())
       .then(res => {
         console.log(res);
-        const items = res.items;
-        items.map((i: { key: number; }) => i.key = Math.random());
+        res.items.map((i: { key: string; uuid: string; }) => i.key = i.uuid);
         setJobsArr(res.items);
       })
       .catch(error => console.log('Error while fetching:', error));
