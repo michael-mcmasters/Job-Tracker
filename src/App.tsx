@@ -4,7 +4,7 @@ import NewJob from './components/NewJob';
 import JobEntries from './components/JobEntries';
 import Job from './models/Job';
 
-const fetchRealAPI = false;   // ToDo: Make env variable
+const fetchRealAPI = process.env.REACT_APP_FETCH_REAL_API === "true" ? true : false;
 
 function App() {
   
@@ -49,8 +49,10 @@ function App() {
   
   useEffect(() => {
     if (fetchRealAPI) {
+      console.log(true);
       fetchAPI();
     } else {
+      console.log(false)
       fetchFakeData();
     }
   }, [])
