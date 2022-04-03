@@ -62,9 +62,6 @@ function App() {
   
   return (
     <div className={styles.App}>
-      <h1 className="bg-white rounded hover:bg-blue-100 hover:cursor-pointer w-fit justify-self-center">
-        Hello world!
-      </h1>
       <NewJob addJob={addJob}/>
       <JobEntries jobsArr={jobsArr} />
     </div>
