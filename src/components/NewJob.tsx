@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { setSyntheticLeadingComments } from 'typescript';
 import Job from '../models/Job';
 import styles from "../styles/NewJob.module.css";
 
@@ -32,8 +33,8 @@ const NewJob = (props: Props) => {
   }
   
   return (
-    <div className={styles.background}>
-      <div className="input-container">
+    <div className="px-4 m-4 bg-orange-500 rounded-2xl">
+      <div className="flex justify-start">
         <input type="text" placeholder="Company" onChange={e => userInput.current.company = e.target.value}></input>
         <input type="text" placeholder="Resume" onChange={e => userInput.current.resume = e.target.value}></input>
         <input type="text" placeholder="Applied" onChange={e => userInput.current.applied = e.target.value}></input>

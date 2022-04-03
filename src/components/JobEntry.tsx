@@ -27,7 +27,7 @@ const JobEntry = (props: Props) => {
         <div>{props.job.appUrl}</div>
       </div> */}
       
-      <div className="px-4 py-2 m-4 transition-all duration-100 bg-pink-500 rounded-2xl h-fit backdrop-blur-3xl hover:bg-pink-600">
+      <div className="px-4 py-2 m-4 transition-all duration-100 bg-cyan-400 rounded-2xl h-fit backdrop-blur-3xl hover:bg-pink-600">
         <div className="text-xl">{props.job.company}</div>
         <div className=""><span className="font-bold text-purple-800">Applied: </span> {props.job.applied}</div>
         <div className=""><span className="font-bold text-purple-800">Resume: </span> {props.job.resume}</div>
