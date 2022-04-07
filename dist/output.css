@@ -589,6 +589,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   max-width: 32rem;
 }
 
+.max-w-sm {
+  max-width: 24rem;
+}
+
 .appearance-none {
   -webkit-appearance: none;
           appearance: none;
@@ -913,6 +917,10 @@ code {
 @media (min-width: 640px) {
   .sm\:w-1\/2 {
     width: 50%;
+  }
+
+  .sm\:max-w-lg {
+    max-width: 32rem;
   }
 
   .sm\:bg-red-100 {

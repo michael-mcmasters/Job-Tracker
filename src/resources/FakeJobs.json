@@ -1,0 +1,28 @@
+{
+  "jobs": [
+    {
+      "key": 0,
+      "company": "Zillow",
+      "resume": "2.22.22",
+      "applied": "2.22.22",
+      "reason": "Seems like a fun company",
+      "appUrl": "https: //careers.zillowgroup.com/job/13901012/frontend-software-engineer-remote/"
+    },
+    {
+      "key": 1,
+      "company": "NVidia",
+      "resume": "3.27.22",
+      "applied": "3.27.22",
+      "reason": "Highly raited company",
+      "appUrl": "nvidia.com"
+    },
+    {
+      "key": 2,
+      "company": "Google",
+      "resume": "4.11.22",
+      "applied": "4.11.22",
+      "reason": "The OG best company",
+      "appUrl": "google.com/jobs"
+    }
+  ]
+}

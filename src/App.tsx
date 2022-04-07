@@ -3,6 +3,7 @@ import styles from './styles/App.module.css';
 import NewJob from './components/NewJob';
 import JobEntries from './components/JobEntries';
 import Job from './models/Job';
+import fakeJobsJSON from "./resources/FakeJobs.json";
 
 const fetchRealAPI = process.env.REACT_APP_FETCH_REAL_API === "true" ? true : false
 
@@ -26,33 +27,11 @@ function App() {
       .catch(error => console.log('Error while fetching:', error));
   }
   
-  function fetchFakeData() {
-    const firstJob: Job = {
-      key: 0,
-      company: 'Zillow',
-      resume: '3.27.22',
-      applied: '3.27.22',
-      reason: 'Seems like a fun company',
-      appUrl: 'https://careers.zillowgroup.com/job/13901012/frontend-software-engineer-remote/'
-    };
-    const secondJob: Job = {
-      key: 1,
-      company: 'NVidia',
-      resume: '1.1.22',
-      applied: '2.2.22',
-      reason: 'Highly rated company',
-      appUrl: 'https://www.nvidia.com/en-us/about-nvidia/careers/'
-    };
-    setJobsArr([firstJob, secondJob]);
-  }
-  
   useEffect(() => {
     if (fetchRealAPI) {
-      console.log(true);
       fetchAPI();
     } else {
-      console.log(false)
-      fetchFakeData();
+      setJobsArr(fakeJobsJSON.jobs);
     }
   }, [])
   
