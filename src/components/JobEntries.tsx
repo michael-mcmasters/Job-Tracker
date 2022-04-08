@@ -7,10 +7,17 @@ interface Props {
 }
 
 const JobEntries = (props: Props) => {
-    
+  
+  const arr = props.jobsArr.sort((a, b) => {
+    if (a.applied < b.applied) {
+      return 1;
+    }
+    return -1;
+  });
+  
   return (
     <>
-      {props.jobsArr.map(j => (
+      {arr.map(j => (
         <JobEntry
           key={j.key}
           job={j}
