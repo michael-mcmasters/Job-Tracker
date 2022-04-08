@@ -593,6 +593,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   max-width: 24rem;
 }
 
+.max-w-md {
+  max-width: 28rem;
+}
+
 .appearance-none {
   -webkit-appearance: none;
           appearance: none;
@@ -923,6 +927,10 @@ code {
     max-width: 32rem;
   }
 
+  .sm\:max-w-xl {
+    max-width: 36rem;
+  }
+
   .sm\:bg-red-100 {
     --tw-bg-opacity: 1;
     background-color: rgb(254 226 226 / var(--tw-bg-opacity));
@@ -948,6 +956,10 @@ code {
 
   .md\:w-1\/4 {
     width: 25%;
+  }
+
+  .md\:max-w-xl {
+    max-width: 36rem;
   }
 
   .md\:bg-red-500 {
