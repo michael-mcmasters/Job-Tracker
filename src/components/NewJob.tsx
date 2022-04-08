@@ -40,7 +40,7 @@ const NewJob = (props: Props) => {
 
   return (
     <>
-      <form className="p-4 m-6 bg-orange-500 rounded-2xl">
+      <form className="p-4 m-6 border-2 bg-amber-500 rounded-2xl border-amber-600">
         
         <div className="flex">
           <div className="w-full px-3">
