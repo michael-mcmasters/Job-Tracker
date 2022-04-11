@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { setSyntheticLeadingComments } from 'typescript';
 import Job from '../models/Job';
 
@@ -16,11 +16,12 @@ interface UserInput {
 
 
 const NewJob = (props: Props) => {
-
+  
+  const [appliedDate, setAppliedDate] = useState<string>(new Date().toISOString().substring(0, 10));    // Today's date
   const userInput = useRef<UserInput>({
     company: '',
     resume: '',
-    applied: '',
+    applied: appliedDate,
     appUrl: '',
     reason: ''
   });
@@ -31,13 +32,22 @@ const NewJob = (props: Props) => {
       key: Math.random(),
       company: userInput.current.company,
       resume: userInput.current.resume,
-      applied: userInput.current.applied,
+      applied: formatDate(appliedDate),
       reason: userInput.current.reason,
       appUrl: userInput.current.appUrl
     };
     props.addJob(newJob);
   }
-
+  
+  // Date comes in fomratted as 2022-04-11, this returns it formatted as 4.11.222
+  function formatDate(date: string): string {
+    const arr = date.split("-");
+    const month = parseInt(arr[1]);   // parseInt removes '0' at beginning of string
+    const day = parseInt(arr[2]);
+    const last2DigitsOfYear = arr[0].charAt(2) + arr[0].charAt(3);
+    return `${month}.${day}.${last2DigitsOfYear}`;
+  }
+  
   return (
     <>
       <form className="p-4 m-6 border-2 bg-amber-500 rounded-2xl border-amber-600">
@@ -55,7 +65,7 @@ const NewJob = (props: Props) => {
               APPLIED
             </label>
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
-              id="applied" type="text" placeholder="4/11/2022" onChange={e => userInput.current.applied = e.target.value} />
+              id="applied" type="date" value={appliedDate} onChange={(e) => setAppliedDate(e.target.value)}/>
           </div>
           <div className="w-full px-3">
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="resume">
