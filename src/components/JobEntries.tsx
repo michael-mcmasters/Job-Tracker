@@ -6,19 +6,10 @@ interface Props {
   jobsArr: Array<Job>
 }
 
-function sortByAppliedDate(jobsArr: Array<Job>): Array<Job> {
-  return jobsArr.sort((a, b) => {
-    if (a.applied < b.applied) {
-      return 1;
-    }
-    return -1;
-  });
-}
 
+const JobEntries = (props: Props) => {
 
-const JobEntries = ({jobsArr}: Props) => {
-
-  const sortedJobsArr = sortByAppliedDate(jobsArr);
+  const sortedJobsArr = sortByAppliedDate(props.jobsArr);
   
   return (
     <>
@@ -31,5 +22,15 @@ const JobEntries = ({jobsArr}: Props) => {
     </>
   );
 };
+
+
+function sortByAppliedDate(jobsArr: Array<Job>): Array<Job> {
+  return jobsArr.sort((a, b) => {
+    if (a.applied < b.applied) {
+      return 1;
+    }
+    return -1;
+  });
+}
 
 export default JobEntries;

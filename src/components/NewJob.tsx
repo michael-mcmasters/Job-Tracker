@@ -15,6 +15,7 @@ interface UserInput {
 }
 
 const todaysDate = new Date().toISOString().substring(0, 10);
+
 const initialUserInput: UserInput = {
   company: '',
   resume: '',
@@ -38,23 +39,7 @@ const NewJob = (props: Props) => {
       reason: userInput.reason,
       appUrl: userInput.appUrl
     });
-    clearUserInput();
-  }
-  
-  // Date comes in formatted as 2022-04-11, this returns it formatted as 4.11.22
-  function formatDate(date: string): string {
-    const dateArr = date.split("-");
-    const month = parseInt(dateArr[1]);   // parseInt removes '0' at beginning of string
-    const day = parseInt(dateArr[2]);
-    const last2DigitsOfYear = dateArr[0].charAt(2) + dateArr[0].charAt(3);
-    return `${month}.${day}.${last2DigitsOfYear}`;
-  }
-  
-  function clearUserInput() {
-    setUserInput({
-      ...initialUserInput,
-      applied: userInput.applied
-    })
+    setUserInput(resetUserInput(userInput));
   }
   
   return (
@@ -115,5 +100,22 @@ const NewJob = (props: Props) => {
     </>
   );
 };
+
+
+// Date comes in formatted as 2022-04-11, this returns it formatted as 4.11.22
+function formatDate(date: string): string {
+  const dateArr = date.split("-");
+  const month = parseInt(dateArr[1]);   // parseInt removes '0' at beginning of string
+  const day = parseInt(dateArr[2]);
+  const last2DigitsOfYear = dateArr[0].charAt(2) + dateArr[0].charAt(3);
+  return `${month}.${day}.${last2DigitsOfYear}`;
+}
+
+function resetUserInput(userInput: UserInput): UserInput {
+  return {
+    ...initialUserInput,
+    applied: userInput.applied
+  };
+}
 
 export default NewJob;
