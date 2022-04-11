@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { setSyntheticLeadingComments } from 'typescript';
 import Job from '../models/Job';
 
 interface Props {
@@ -14,38 +13,47 @@ interface UserInput {
   reason: string;
 }
 
+const todaysDate = new Date().toISOString().substring(0, 10);
+const initialUserInput: UserInput = {
+  company: '',
+  resume: '',
+  applied: todaysDate,
+  appUrl: '',
+  reason: ''
+}
+
 
 const NewJob = (props: Props) => {
   
-  const [appliedDate, setAppliedDate] = useState<string>(new Date().toISOString().substring(0, 10));    // Today's date
-  const userInput = useRef<UserInput>({
-    company: '',
-    resume: '',
-    applied: appliedDate,
-    appUrl: '',
-    reason: ''
-  });
+  const [userInput, setUserInput] = useState<UserInput>(initialUserInput);
 
+  // ToDo: Validate input. If Successful, then submit
   function handleSubmit() {
-    // ToDo: Validate input. If Successful, then submit
-    const newJob: Job = {
+    props.addJob({
       key: Math.random(),
-      company: userInput.current.company,
-      resume: userInput.current.resume,
-      applied: formatDate(appliedDate),
-      reason: userInput.current.reason,
-      appUrl: userInput.current.appUrl
-    };
-    props.addJob(newJob);
+      company: userInput.company,
+      resume: userInput.resume,
+      applied: formatDate(userInput.applied),
+      reason: userInput.reason,
+      appUrl: userInput.appUrl
+    });
+    clearUserInput();
   }
   
-  // Date comes in fomratted as 2022-04-11, this returns it formatted as 4.11.222
+  // Date comes in formatted as 2022-04-11, this returns it formatted as 4.11.222
   function formatDate(date: string): string {
-    const arr = date.split("-");
-    const month = parseInt(arr[1]);   // parseInt removes '0' at beginning of string
-    const day = parseInt(arr[2]);
-    const last2DigitsOfYear = arr[0].charAt(2) + arr[0].charAt(3);
+    const dateArr = date.split("-");
+    const month = parseInt(dateArr[1]);   // parseInt removes '0' at beginning of string
+    const day = parseInt(dateArr[2]);
+    const last2DigitsOfYear = dateArr[0].charAt(2) + dateArr[0].charAt(3);
     return `${month}.${day}.${last2DigitsOfYear}`;
+  }
+  
+  function clearUserInput() {
+    setUserInput({
+      ...initialUserInput,
+      applied: userInput.applied
+    })
   }
   
   return (
@@ -58,21 +66,21 @@ const NewJob = (props: Props) => {
               COMPANY
             </label>
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
-              id="company" type="text" placeholder="Zillow" onChange={e => userInput.current.company = e.target.value} />
+              id="company" type="text" placeholder="Zillow" value={userInput.company} onChange={e => {setUserInput({...userInput, company: e.target.value})}} />
           </div>
           <div className="w-full px-3">
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="applied">
               APPLIED
             </label>
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
-              id="applied" type="date" value={appliedDate} onChange={(e) => setAppliedDate(e.target.value)}/>
+              id="applied" type="date" value={userInput.applied} onChange={e => { setUserInput({ ...userInput, applied: e.target.value }) }}/>
           </div>
           <div className="w-full px-3">
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="resume">
               RESUME
             </label>
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
-              id="resume" type="text" placeholder="4.11.2022" onChange={e => userInput.current.resume = e.target.value} />
+              id="resume" type="text" placeholder="4.11.2022" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
           </div>
         </div>
         
@@ -82,7 +90,7 @@ const NewJob = (props: Props) => {
               APPLICATION URL
             </label>
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
-              id="app-url" type="text" placeholder="abc.com/jobs" onChange={e => userInput.current.appUrl = e.target.value} />
+              id="app-url" type="text" placeholder="abc.com/jobs" value={userInput.appUrl} onChange={e => { setUserInput({ ...userInput, appUrl: e.target.value }) }} />
           </div>
         </div>
         
@@ -92,7 +100,7 @@ const NewJob = (props: Props) => {
               REASON APPLIED
             </label>
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
-              id="reason-applied" type="text" placeholder="Exciting culture, perfect tech stack, healthy work life balance" onChange={e => userInput.current.reason = e.target.value} />
+              id="reason-applied" type="text" placeholder="Exciting culture, perfect tech stack, healthy work life balance" value={userInput.reason} onChange={e => { setUserInput({ ...userInput, reason: e.target.value }) }} />
           </div>
         </div>
 
