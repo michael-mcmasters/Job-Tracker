@@ -23,7 +23,6 @@ export default function useJobsAPI() {
     })
       .then((res) => res.json())
       .then(res => {
-        console.log(res);
         res.items.map((i: { key: string; uuid: string; }) => i.key = i.uuid);
         setJobsArr(res.items);
       })

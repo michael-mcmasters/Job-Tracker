@@ -1,5 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Job from '../models/Job';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
   addJob(job: Job): void;
@@ -30,7 +31,7 @@ const NewJob = (props: Props) => {
   // ToDo: Validate input. If Successful, then submit
   function handleSubmit() {
     props.addJob({
-      key: Math.random(),
+      key: uuidv4(),
       company: userInput.company,
       resume: userInput.resume,
       applied: formatDate(userInput.applied),
@@ -40,7 +41,7 @@ const NewJob = (props: Props) => {
     clearUserInput();
   }
   
-  // Date comes in formatted as 2022-04-11, this returns it formatted as 4.11.222
+  // Date comes in formatted as 2022-04-11, this returns it formatted as 4.11.22
   function formatDate(date: string): string {
     const dateArr = date.split("-");
     const month = parseInt(dateArr[1]);   // parseInt removes '0' at beginning of string
@@ -58,7 +59,7 @@ const NewJob = (props: Props) => {
   
   return (
     <>
-      <form className="p-4 m-6 border-2 bg-amber-500 rounded-2xl border-amber-600">
+      <form className="p-4 m-6 border-2 bg-amber-400 rounded-2xl border-amber-600">
         
         <div className="flex">
           <div className="w-full px-3">

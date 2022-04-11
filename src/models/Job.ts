@@ -1,5 +1,5 @@
 export default interface JobObject {
-  key: number;
+  key: string;
   company: string;
   resume: string;
   applied: string;
