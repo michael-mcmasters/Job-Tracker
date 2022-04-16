@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  job-tracker:
+    container_name: job-tracker_c
+    image: job-tracker                # Didn't have an image name, so I just put this here and it seems to work. Probably can delete this property
+    build:
+      context: .
+      target: development
+    volumes:
+      - ./src:/app/src                # Need to learn how this works
+    ports:
+      - 3000:3000                     # Host listens on 3000, forwards to container's 3000 port where app is listening (3000 is default for React apps)
