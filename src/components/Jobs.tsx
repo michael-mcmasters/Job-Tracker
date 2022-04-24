@@ -1,13 +1,13 @@
 import React from 'react';
-import JobEntry from './JobEntry';
-import Job from "../models/Job"
+import JobEntry from './Job';
+import {default as JobType} from "../models/job"
 
 interface Props {
-  jobsArr: Array<Job>
+  jobsArr: Array<JobType>
 }
 
 
-const JobEntries = (props: Props) => {
+const Job = (props: Props) => {
 
   const sortedJobsArr = sortByAppliedDate(props.jobsArr);
   
@@ -24,7 +24,7 @@ const JobEntries = (props: Props) => {
 };
 
 
-function sortByAppliedDate(jobsArr: Array<Job>): Array<Job> {
+function sortByAppliedDate(jobsArr: Array<JobType>): Array<JobType> {
   return jobsArr.sort((a, b) => {
     if (a.applied < b.applied) {
       return 1;
@@ -33,4 +33,4 @@ function sortByAppliedDate(jobsArr: Array<Job>): Array<Job> {
   });
 }
 
-export default JobEntries;
+export default Job;

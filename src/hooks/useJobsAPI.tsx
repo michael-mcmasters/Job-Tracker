@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Job from "../models/Job";
+import {default as JobType} from "../models/job";
 import fakeJobsJSON from "../resources/FakeJobs.json";
 import { parseEnvBoolean, randomDelay } from "../utils/commonUtils"
 
@@ -8,7 +8,7 @@ const fetchRealAPI = parseEnvBoolean(process.env.REACT_APP_FETCH_REAL_API);
 
 export default function useJobsAPI() {
   
-  const [jobsArr, setJobsArr] = useState<Array<Job>>([]);
+  const [jobsArr, setJobsArr] = useState<Array<JobType>>([]);
   
   async function fetchJobs() {
     await randomDelay();
@@ -33,7 +33,7 @@ export default function useJobsAPI() {
     }
   }
   
-  function addJob(job: Job) {
+  function addJob(job: JobType) {
     setJobsArr([...jobsArr, job])
     
     if (!fetchRealAPI) {

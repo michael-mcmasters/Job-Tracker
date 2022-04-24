@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Job from '../models/Job';
+import Job from '../models/job';
 import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
@@ -25,7 +25,7 @@ const initialUserInput: UserInput = {
 }
 
 
-const NewJob = (props: Props) => {
+const NewJobForm = (props: Props) => {
   
   const [userInput, setUserInput] = useState<UserInput>(initialUserInput);
 
@@ -118,4 +118,5 @@ function resetUserInput(userInput: UserInput): UserInput {
   };
 }
 
-export default NewJob;
+export default NewJobForm
+;

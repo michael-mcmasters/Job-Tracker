@@ -1,4 +1,4 @@
-export default interface JobObject {
+export default interface Job {
   key: string;
   company: string;
   resume: string;

@@ -1,12 +1,12 @@
 import React from 'react';
 import styles from "../styles/Job.module.css";
-import Job from "../models/Job"
+import {default as JobType} from "../models/job"
 
 interface Props {
-  job: Job;
+  job: JobType;
 }
 
-const JobEntry = (props: Props) => {
+const Job = (props: Props) => {
   return (
     <>  
       {/* <div className="max-w-md px-4 py-2 m-4 mx-auto transition-all duration-100 bg-cyan-400 rounded-2xl h-fit backdrop-blur-3xl hover:bg-pink-600 sm:max-w-xl"> */}
@@ -22,4 +22,4 @@ const JobEntry = (props: Props) => {
   );
 };
 
-export default JobEntry;
+export default Job;

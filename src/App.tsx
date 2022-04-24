@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styles from './styles/App.module.css';
-import NewJob from './components/NewJob';
-import JobEntries from './components/JobEntries';
-import Job from './models/Job';
+import NewJob from './components/NewJobForm';
+import JobEntries from './components/Jobs';
 import useJobsAPI from './hooks/useJobsAPI';
 
 function App() {
