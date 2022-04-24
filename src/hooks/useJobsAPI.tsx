@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Job from "../models/Job";
 import fakeJobsJSON from "../resources/FakeJobs.json";
-import { randomDelay } from "../utils/commonUtils"
+import { randomDelay, parseEnvBoolean } from "../utils/commonUtils"
 
-const fetchRealAPI = process.env.REACT_APP_FETCH_REAL_API === "true" ? true : false
+const fetchRealAPI = parseEnvBoolean(process.env.REACT_APP_FETCH_REAL_API);
 
 
 export default function useJobsAPI() {
@@ -18,7 +18,7 @@ export default function useJobsAPI() {
       return;
     }
     
-    const request = fetch('https://igefue8jt4.execute-api.us-east-1.amazonaws.com/', {
+    fetch('https://igefue8jt4.execute-api.us-east-1.amazonaws.com/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
