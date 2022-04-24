@@ -1,6 +1,7 @@
 import React from 'react';
 import JobEntry from './Job';
 import {default as JobType} from "../models/job"
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface Props {
   jobsArr: Array<JobType>
@@ -8,9 +9,16 @@ interface Props {
 
 
 const Job = (props: Props) => {
-
-  const sortedJobsArr = sortByAppliedDate(props.jobsArr);
   
+  if (props.jobsArr.length === 0) {
+    return (
+      <div className="mx-auto mt-20 w-fit">
+        <ClipLoader size={150} />
+      </div>
+    )
+  }
+  
+  const sortedJobsArr = sortByAppliedDate(props.jobsArr);
   return (
     <>
       {sortedJobsArr.map(j => (
