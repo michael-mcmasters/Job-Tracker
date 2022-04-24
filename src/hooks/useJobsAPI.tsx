@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Job from "../models/Job";
 import fakeJobsJSON from "../resources/FakeJobs.json";
-import { randomDelay, parseEnvBoolean } from "../utils/commonUtils"
+import { parseEnvBoolean, randomDelay } from "../utils/commonUtils"
 
 const fetchRealAPI = parseEnvBoolean(process.env.REACT_APP_FETCH_REAL_API);
 
@@ -18,18 +18,19 @@ export default function useJobsAPI() {
       return;
     }
     
-    fetch('https://igefue8jt4.execute-api.us-east-1.amazonaws.com/', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
-      .then((res) => res.json())
-      .then(res => {
-        res.items.map((i: { key: string; uuid: string; }) => i.key = i.uuid);
-        setJobsArr(res.items);
-      })
-      .catch(error => console.log('Error while fetching:', error));
+    try {
+      const response: Response = await fetch('https://igefue8jt4.execute-api.us-east-1.amazonaws.com/', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const resJson = await response.json();
+      resJson.items.map((i: { key: string; uuid: string; }) => i.key = i.uuid);
+      setJobsArr(resJson.items);
+    } catch(exception: unknown) {
+      console.log('Error while fetching:', exception);
+    }
   }
   
   function addJob(job: Job) {
