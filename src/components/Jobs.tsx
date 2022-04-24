@@ -1,6 +1,6 @@
 import React from 'react';
 import JobEntry from './Job';
-import {default as JobType} from "../models/job"
+import {default as JobType} from "../models/Job"
 import ClipLoader from "react-spinners/ClipLoader";
 
 interface Props {

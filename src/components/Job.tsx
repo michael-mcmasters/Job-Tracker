@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from "../styles/Job.module.css";
-import {default as JobType} from "../models/job"
+import {default as JobType} from "../models/Job"
 
 interface Props {
   job: JobType;

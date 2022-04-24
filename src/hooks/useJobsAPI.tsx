@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {default as JobType} from "../models/job";
+import {default as JobType} from "../models/Job";
 import fakeJobsJSON from "../resources/FakeJobs.json";
 import { parseEnvBoolean, randomDelay } from "../utils/commonUtils"
 

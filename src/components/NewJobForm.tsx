@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Job from '../models/job';
+import Job from '../models/Job';
 import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
