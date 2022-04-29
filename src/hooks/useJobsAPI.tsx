@@ -55,5 +55,9 @@ export default function useJobsAPI() {
       .catch(error => console.log('error', error));
   }
   
+  function postResumeToS3() {
+    
+  }
+  
   return {jobsArr, fetchJobs, addJob};
 }

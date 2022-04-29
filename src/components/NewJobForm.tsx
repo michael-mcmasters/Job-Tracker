@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Job from '../models/Job';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -28,6 +28,7 @@ const initialUserInput: UserInput = {
 const NewJobForm = (props: Props) => {
   
   const [userInput, setUserInput] = useState<UserInput>(initialUserInput);
+  const fileRef = useRef<any>();
 
   // ToDo: Validate input. If Successful, then submit
   function handleSubmit() {
@@ -42,8 +43,49 @@ const NewJobForm = (props: Props) => {
     setUserInput(resetUserInput(userInput));
   }
   
+  function postToS3() {
+    // const myHeaders = new Headers();
+    // myHeaders.append("Content-Type", "text/plain");
+
+    // const requestOptions = {
+    //   method: 'POST',
+    //   headers: myHeaders,
+    //   body: JSON.stringify(job)
+    // };
+
+    // fetch("https://wlxw76ft60.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf", requestOptions)
+    //   .then(response => response.text())
+    //   .then(result => console.log("API Result is " + result))
+    //   .catch(error => console.log('error', error));
+    
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/pdf");
+
+    var file = fileRef.current;
+
+    const requestOptions = {
+      method: 'PUT',
+      headers: myHeaders,
+      body: file
+    };
+    // redirect: 'follow'
+
+    fetch("https://wlxw76ft60.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf", requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
+  }
+  
   return (
     <>
+      <input type="file" onChange={(e) => {
+        if (!e.target.files) return;
+        
+        fileRef.current = e.target.files[0];
+        postToS3();
+        
+      }} />
+    
       <form className="p-4 m-6 border-2 bg-amber-400 rounded-2xl border-amber-600">
         
         <div className="flex">
