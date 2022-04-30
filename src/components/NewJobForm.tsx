@@ -29,6 +29,7 @@ const NewJobForm = (props: Props) => {
   
   const [userInput, setUserInput] = useState<UserInput>(initialUserInput);
   const fileRef = useRef<any>();
+  const [returnedFile, setReturnedFile] = useState<any>();
 
   // ToDo: Validate input. If Successful, then submit
   function handleSubmit() {
@@ -44,20 +45,6 @@ const NewJobForm = (props: Props) => {
   }
   
   function postToS3() {
-    // const myHeaders = new Headers();
-    // myHeaders.append("Content-Type", "text/plain");
-
-    // const requestOptions = {
-    //   method: 'POST',
-    //   headers: myHeaders,
-    //   body: JSON.stringify(job)
-    // };
-
-    // fetch("https://wlxw76ft60.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf", requestOptions)
-    //   .then(response => response.text())
-    //   .then(result => console.log("API Result is " + result))
-    //   .catch(error => console.log('error', error));
-    
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/pdf");
 
@@ -76,8 +63,40 @@ const NewJobForm = (props: Props) => {
       .catch(error => console.log('error', error));
   }
   
+  function getFromS3() {
+    // Can use these to determine what file type returned. Not necessary though since we are the ones calling the API and saying what the file type we want.
+    //response.url    // Can also get file type at end of response url.
+    //const contentType = response.headers.get('content-type')
+
+    fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf")   // pdf
+    // fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/abc.jpeg")      // image
+      .then(response => response.blob())
+      .then(pdfBlob => {
+        setReturnedFile(URL.createObjectURL(pdfBlob));
+      })
+      .catch(error => console.log('error', error));
+  }
+  
   return (
     <>
+      <button onClick={getFromS3}>Get Image</button>
+      <img src={returnedFile} />
+      <embed
+        src={returnedFile}
+        type="application/pdf"
+        height="200%"
+        width="100%"
+      ></embed>
+      
+      {/* <iframe
+        src={returnedFile}
+        frameBorder="0"
+        scrolling="auto"
+        height="100%"
+        width="100%"
+      ></iframe> */}
+      
+      <br />
       <input type="file" onChange={(e) => {
         if (!e.target.files) return;
         
