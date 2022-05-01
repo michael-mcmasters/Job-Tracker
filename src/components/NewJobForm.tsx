@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import Job from '../models/Job';
 import { v4 as uuidv4 } from 'uuid';
+import useJobsAPI from '../hooks/useJobsAPI';
 
 interface Props {
   addJob(job: Job): void;
@@ -28,8 +29,11 @@ const initialUserInput: UserInput = {
 const NewJobForm = (props: Props) => {
   
   const [userInput, setUserInput] = useState<UserInput>(initialUserInput);
-  const fileRef = useRef<any>();
+  const fileRef = useRef<File>();
   const [returnedFile, setReturnedFile] = useState<any>();
+  
+  // TODO: Move this to App.tex
+  const { jobsArr, fetchJobs, addJob, postResumeToS3, getResumeFromS3 } = useJobsAPI();
 
   // ToDo: Validate input. If Successful, then submit
   function handleSubmit() {
@@ -44,42 +48,11 @@ const NewJobForm = (props: Props) => {
     setUserInput(resetUserInput(userInput));
   }
   
-  function postToS3() {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/pdf");
-
-    var file = fileRef.current;
-
-    const requestOptions = {
-      method: 'PUT',
-      headers: myHeaders,
-      body: file
-    };
-    // redirect: 'follow'
-
-    fetch("https://wlxw76ft60.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf", requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));
-  }
-  
-  function getFromS3() {
-    // Can use these to determine what file type returned. Not necessary though since we are the ones calling the API and saying what the file type we want.
-    //response.url    // Can also get file type at end of response url.
-    //const contentType = response.headers.get('content-type')
-
-    fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf")   // pdf
-    // fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/abc.jpeg")      // image
-      .then(response => response.blob())
-      .then(pdfBlob => {
-        setReturnedFile(URL.createObjectURL(pdfBlob));
-      })
-      .catch(error => console.log('error', error));
-  }
-  
   return (
     <>
-      <button onClick={getFromS3}>Get Image</button>
+      {/* <button onClick={getFromS3}>Get Image</button> */}
+      {/* <button onClick={() => setReturnedFile(getResumeFromS3)}>Get Image</button> */}
+      <button onClick={() => getResumeFromS3().then((res) => setReturnedFile(res))}>Get Image</button>
       <img src={returnedFile} />
       <embed
         src={returnedFile}
@@ -101,7 +74,8 @@ const NewJobForm = (props: Props) => {
         if (!e.target.files) return;
         
         fileRef.current = e.target.files[0];
-        postToS3();
+        // postToS3();
+        postResumeToS3(fileRef.current);
         
       }} />
     

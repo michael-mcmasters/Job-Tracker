@@ -55,9 +55,29 @@ export default function useJobsAPI() {
       .catch(error => console.log('error', error));
   }
   
-  function postResumeToS3() {
-    
+  function postResumeToS3(file: File) {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/pdf");
+
+    const requestOptions = {
+      method: 'PUT',
+      headers: myHeaders,
+      body: file
+    };
+
+    fetch("https://wlxw76ft60.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf", requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
   }
   
-  return {jobsArr, fetchJobs, addJob};
+  function getResumeFromS3() {
+    // fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/abc.jpeg")      // image
+    return fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf")   // pdf
+      .then(response => response.blob())
+      .then(pdfBlob => URL.createObjectURL(pdfBlob))
+      .catch(error => console.log('error', error));
+  }
+  
+  return {jobsArr, fetchJobs, addJob, postResumeToS3, getResumeFromS3};
 }
