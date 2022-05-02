@@ -40,12 +40,12 @@ export default function useJobsAPI() {
       return;
     }
       
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "text/plain");
+    const headers = new Headers();
+    headers.append("Content-Type", "text/plain");
 
-    const requestOptions = {
+    const requestOptions: RequestInit = {
       method: 'POST',
-      headers: myHeaders,
+      headers: headers,
       body: JSON.stringify(job)
     };
     
@@ -56,12 +56,12 @@ export default function useJobsAPI() {
   }
   
   function postResumeToS3(file: File) {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/pdf");
+    const headers = new Headers();
+    headers.append("Content-Type", "application/pdf");
 
-    const requestOptions = {
+    const requestOptions: RequestInit = {
       method: 'PUT',
-      headers: myHeaders,
+      headers: headers,
       body: file
     };
 
@@ -72,7 +72,7 @@ export default function useJobsAPI() {
   }
   
   function getResumeFromS3() {
-    // fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/abc.jpeg")      // image
+    // fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/abc.jpeg")             // image
     return fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf")   // pdf
       .then(response => response.blob())
       .then(pdfBlob => URL.createObjectURL(pdfBlob))
