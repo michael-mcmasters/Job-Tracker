@@ -71,12 +71,18 @@ export default function useJobsAPI() {
       .catch(error => console.log('error', error));
   }
   
+  // TODO: Should take in the resume name
   function getResumeFromS3() {
-    // fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/abc.jpeg")             // image
+    // return fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/abc.jpeg")             // image
     return fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf")   // pdf
       .then(response => response.blob())
       .then(pdfBlob => URL.createObjectURL(pdfBlob))
       .catch(error => console.log('error', error));
+      
+      
+    // return fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf")
+    //   .then(r => r.blob())
+    //   .then(blobFile => new File([blobFile], "fileNameGoesHere", { type: "image/png" }));
   }
   
   return {jobsArr, fetchJobs, addJob, postResumeToS3, getResumeFromS3};
