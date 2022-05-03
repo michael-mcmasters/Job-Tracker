@@ -26,7 +26,7 @@ function App() {
             } />
         </Routes>
         <Routes>
-          <Route path='/pdf-viewer' element={<PDFViewer />} />
+          <Route path='/resume-viewer/:resumeFileName' element={<PDFViewer />} />
         </Routes>
       </BrowserRouter>
     </div>

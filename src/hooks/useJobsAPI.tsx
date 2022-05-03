@@ -72,7 +72,7 @@ export default function useJobsAPI() {
   }
   
   // TODO: Should take in the resume name
-  function getResumeFromS3() {
+  function getResumeFromS3(): Promise<string | void> {
     // return fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/abc.jpeg")             // image
     return fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf")   // pdf
       .then(response => response.blob())
