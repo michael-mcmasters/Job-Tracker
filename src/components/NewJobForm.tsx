@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Job from '../models/Job';
 import { v4 as uuidv4 } from 'uuid';
 import useJobsAPI from '../hooks/useJobsAPI';
@@ -17,7 +17,6 @@ interface UserInput {
 }
 
 const todaysDate = new Date().toISOString().substring(0, 10);
-
 const initialUserInput: UserInput = {
   company: '',
   resume: '',
@@ -26,21 +25,69 @@ const initialUserInput: UserInput = {
   reason: ''
 }
 
+// Problem: Can't get value from resume, because resume is named "Michael McMasters Resume", not its date.
+// -
+// On app load:
+// Resume Text field has most recent resume name
+// -
+// On upload resume
+// Resume Text field goes blank
+// -
+// On submit, get error if you didn't put text in text field.
 
 const NewJobForm = (props: Props) => {
   
   const [userInput, setUserInput] = useState<UserInput>(initialUserInput);
   const fileRef = useRef<File>();
-  const resumeInputRef = useRef<any>();
   const { postResumeToS3 } = useJobsAPI();
+  
 
-  // ToDo: Validate input. If Successful, then submit
+  useEffect(() => {
+    if (userInput.resume.length > 0) return;
+    
+    console.log("u is " + userInput.resume.length);
+    setUserInput({
+      ...userInput,
+      resume: getMostRecentResumeName()
+    })
+    
+  }, [props.jobsArr])
+  
+  
+  // TODO: Function doesn't actually return most recent resume. Fix.
+  function getMostRecentResumeName(): string {
+    if (props.jobsArr.length === 0) return "";
+    
+    const resumes: string[] = props.jobsArr.map(j => j.resume);
+    const sortedResumes = resumes.sort((resumeA, resumeB) => {
+      if (Number(resumeA) < Number(resumeB)) return 1;
+      return -1;
+    });
+    console.log(sortedResumes[0]);
+    return sortedResumes[0];
+  }
+  
+
+  function handleUploadResume(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files) return;
+
+    setUserInput({
+      ...userInput,
+      resume: ''
+    })
+    fileRef.current = e.target.files[0];
+    postResumeToS3(fileRef.current).then(() => console.log("success"))
+  }
+
+  
   function handleSubmit() {
-    if (fileRef.current != null && resumeInputRef.current.value.length == 0) {
+    // if (fileRef.current != null && resumeInputRef.current.value.length == 0) {
+    if (fileRef.current != null && userInput.resume.length == 0) {
       console.error("You must enter the resume name before submitting.")
       return;
     }
     
+    // ToDo: Validate all input. If Successful, then submit
     props.addJob({
       key: uuidv4(),
       company: userInput.company,
@@ -50,36 +97,6 @@ const NewJobForm = (props: Props) => {
       appUrl: userInput.appUrl
     });
     setUserInput(resetUserInput(userInput));
-  }
-  
-  
-
-  // Only have text field (no dropdown)
-  // Search resumes and show the most recent one
-  // Don't allow uploading file unless text field has a value. (Can't get value from resume, because resume is named "Michael McMasters Resume", not its date.)
-  
-  
-  function getResumeNames(): Array<string> {
-    const set = new Set<string>();
-    for (let job of props.jobsArr) {
-      set.add(job.resume);
-    }
-    
-    return Array.from(set).sort((resumeA, resumeB) => {
-        if (Number(resumeA) < Number(resumeB)) return 1;
-        return -1;
-    });
-  }
-  
-  function getMostRecent() {
-    
-  }
-  
-  function handleUploadResume(e: React.ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files) return;
-
-    fileRef.current = e.target.files[0];
-    postResumeToS3(fileRef.current).then(() => console.log("success"))
   }
   
   return (
@@ -105,13 +122,8 @@ const NewJobForm = (props: Props) => {
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="resume">
               RESUME
             </label>
-            <input ref={resumeInputRef} className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
-              id="resume" type="text" placeholder="4.11.2022" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
-            <select name="resumeDropdown" id="resumeDropdown">
-              {getResumeNames().map(n => (
-                <option key={n} value={n}>{n}</option>
-              ))}
-            </select>
+            <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
+              id="resume" type="text" placeholder="" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
             <input type="file" onChange={handleUploadResume}/>
           </div>
         </div>
@@ -160,6 +172,7 @@ function formatDate(date: string): string {
 function resetUserInput(userInput: UserInput): UserInput {
   return {
     ...initialUserInput,
+    resume: userInput.resume,
     applied: userInput.applied
   };
 }
