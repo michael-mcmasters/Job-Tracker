@@ -30,10 +30,7 @@ const NewJobForm = (props: Props) => {
   
   const [userInput, setUserInput] = useState<UserInput>(initialUserInput);
   const fileRef = useRef<File>();
-  const [returnedFile, setReturnedFile] = useState<any>();
-  
-  // TODO: Move this to App.tex
-  const { jobsArr, fetchJobs, addJob, postResumeToS3, getResumeFromS3 } = useJobsAPI();
+  const { postResumeToS3 } = useJobsAPI();
 
   // ToDo: Validate input. If Successful, then submit
   function handleSubmit() {
@@ -48,37 +45,15 @@ const NewJobForm = (props: Props) => {
     setUserInput(resetUserInput(userInput));
   }
   
+  function handleUploadFile(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files) return;
+
+    fileRef.current = e.target.files[0];
+    postResumeToS3(fileRef.current).then(() => console.log("success"))
+  }
+  
   return (
     <>
-      {/* <button onClick={getFromS3}>Get Image</button> */}
-      {/* <button onClick={() => setReturnedFile(getResumeFromS3)}>Get Image</button> */}
-      <button onClick={() => getResumeFromS3().then((res) => setReturnedFile(res))}>Get Image</button>
-      <img src={returnedFile} />
-      <embed
-        src={returnedFile}
-        type="application/pdf"
-        height="200%"
-        width="100%"
-      ></embed>
-      
-      {/* <iframe
-        src={returnedFile}
-        frameBorder="0"
-        scrolling="auto"
-        height="100%"
-        width="100%"
-      ></iframe> */}
-      
-      <br />
-      <input type="file" onChange={(e) => {
-        if (!e.target.files) return;
-        
-        fileRef.current = e.target.files[0];
-        // postToS3();
-        postResumeToS3(fileRef.current);
-        
-      }} />
-    
       <form className="p-4 m-6 border-2 bg-amber-400 rounded-2xl border-amber-600">
         
         <div className="flex">
@@ -102,6 +77,12 @@ const NewJobForm = (props: Props) => {
             </label>
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="resume" type="text" placeholder="4.11.2022" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
+            {/* <input type="file" onChange={(e) => {
+              if (!e.target.files) return;
+              fileRef.current = e.target.files[0];
+              postResumeToS3(fileRef.current);
+            }} /> */}
+            <input type="file" onChange={handleUploadFile}/>
           </div>
         </div>
         

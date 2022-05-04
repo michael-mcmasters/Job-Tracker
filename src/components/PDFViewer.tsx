@@ -11,7 +11,7 @@ const PDFViewer = (props: any) => {
   
   useEffect(() => {
     async function fetchResume() {
-      const resume = await getResumeFromS3();
+      const resume = await getResumeFromS3(String(resumeFileName));
       setResumeObjectURL(String(resume));
     }
     fetchResume();
