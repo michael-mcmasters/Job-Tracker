@@ -32,7 +32,6 @@ const todaysDate = new Date().toISOString().substring(0, 10);
 
 const NewJobForm = (props: Props) => {
   
-  const { postResumeToS3 } = useJobsAPI();
   const [userInput, setUserInput] = useState<UserInput>({
     company: '',
     resume: '',
@@ -41,36 +40,23 @@ const NewJobForm = (props: Props) => {
     reason: '',
     resumeFile: undefined
   });
+  const { postResumeToS3 } = useJobsAPI();
   const [error, setError] = useState<string>("");
   
 
   useEffect(() => {
-    if (userInput.resume.length > 0) return;
-    
-    function setResumeFieldToMostRecentResume() {
+    (function setResumeFieldToMostRecentResume() {
+      if (userInput.resume.length > 0) return;
+      
       setUserInput({
         ...userInput,
-        resume: getMostRecentResume(props.jobsArr)
+        resume: findMostRecentResume(props.jobsArr)
       })
-    }
-    setResumeFieldToMostRecentResume();
+    })()
   }, [props.jobsArr])
   
   
-  // TODO: FIX - Function doesn't actually return most recent resume.
-  function getMostRecentResume(jobsArr: Array<Job>): string {
-    if (jobsArr.length === 0) return "";
-    
-    const resumes: string[] = jobsArr.map(j => j.resume);
-    const sortedResumes = resumes.sort((resumeA, resumeB) => {
-      if (Number(resumeA) < Number(resumeB)) return 1;
-      return -1;
-    });
-    return sortedResumes[0];
-  }
-  
-
-  function handleUploadResume(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleAttachResume(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
 
     const resumeFile = e.target.files[0];
@@ -140,7 +126,7 @@ const NewJobForm = (props: Props) => {
             </label>
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="resume" type="text" placeholder="" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
-            <input type="file" onChange={handleUploadResume}/>
+            <input type="file" onChange={handleAttachResume}/>
           </div>
         </div>
         
@@ -176,6 +162,19 @@ const NewJobForm = (props: Props) => {
 };
 
 
+// TODO: FIX - Function doesn't actually return most recent resume.
+function findMostRecentResume(jobsArr: Array<Job>): string {
+  if (jobsArr.length === 0) return "";
+
+  const resumes: string[] = jobsArr.map(j => j.resume);
+  const sortedResumes = resumes.sort((resumeA, resumeB) => {
+    if (Number(resumeA) < Number(resumeB)) return 1;
+    return -1;
+  });
+  return sortedResumes[0];
+}
+
+
 // Date comes in formatted as 2022-04-11, this returns it formatted as 4.11.22
 function formatDate(date: string): string {
   const dateArr = date.split("-");
@@ -184,6 +183,7 @@ function formatDate(date: string): string {
   const last2DigitsOfYear = dateArr[0].charAt(2) + dateArr[0].charAt(3);
   return `${month}.${day}.${last2DigitsOfYear}`;
 }
+
 
 function resetUserInput(userInput: UserInput): UserInput {
   return {
@@ -195,5 +195,6 @@ function resetUserInput(userInput: UserInput): UserInput {
     resumeFile: undefined
   }
 }
+
 
 export default NewJobForm;
