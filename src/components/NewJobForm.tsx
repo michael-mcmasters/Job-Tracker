@@ -18,14 +18,7 @@ interface UserInput {
 }
 
 const todaysDate = new Date().toISOString().substring(0, 10);
-const initialUserInput: UserInput = {
-  company: '',
-  resume: '',
-  applied: todaysDate,
-  appUrl: '',
-  reason: '',
-  resumeFile: null
-}
+
 
 // Problem: Can't get value from resume, because resume is named "Michael McMasters Resume", not its date.
 // -
@@ -39,23 +32,28 @@ const initialUserInput: UserInput = {
 
 const NewJobForm = (props: Props) => {
   
-  const [userInput, setUserInput] = useState<UserInput>(initialUserInput);
   const { postResumeToS3 } = useJobsAPI();
+  const [userInput, setUserInput] = useState<UserInput>({
+    company: '',
+    resume: '',
+    applied: todaysDate,
+    appUrl: '',
+    reason: '',
+    resumeFile: null
+  });
   
 
   useEffect(() => {
     if (userInput.resume.length > 0) return;
     
-    console.log("u is " + userInput.resume.length);
     setUserInput({
       ...userInput,
       resume: getMostRecentResumeName()
     })
-    
   }, [props.jobsArr])
   
   
-  // TODO: Function doesn't actually return most recent resume. Fix.
+  // TODO: FIX - Function doesn't actually return most recent resume.
   function getMostRecentResumeName(): string {
     if (props.jobsArr.length === 0) return "";
     
@@ -173,11 +171,13 @@ function formatDate(date: string): string {
 
 function resetUserInput(userInput: UserInput): UserInput {
   return {
-    ...initialUserInput,
+    company: '',
     resume: userInput.resume,
-    applied: userInput.applied
-  };
+    applied: userInput.applied,
+    appUrl: '',
+    reason: '',
+    resumeFile: null
+  }
 }
 
-export default NewJobForm
-;
+export default NewJobForm;
