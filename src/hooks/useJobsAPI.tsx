@@ -33,6 +33,7 @@ export default function useJobsAPI() {
     }
   }
   
+  
   function addJob(job: JobType) {
     setJobsArr([...jobsArr, job])
     
@@ -55,7 +56,11 @@ export default function useJobsAPI() {
       .catch(error => console.log('error', error));
   }
   
+  
   function postResumeToS3(file: File): Promise<string | void> {
+    if (!fetchRealAPI)
+      return new Promise<void>((resolve, reject) => {resolve()})
+    
     const headers = new Headers();
     headers.append("Content-Type", "application/pdf");
 
@@ -64,27 +69,26 @@ export default function useJobsAPI() {
       headers: headers,
       body: file
     };
-
+    
     return fetch("https://wlxw76ft60.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf", requestOptions)
       .then(response => response.text())
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
   }
   
+  
   // TODO: Should take in the resume name
   function getResumeFromS3(fileName: string): Promise<string | void> {
+    if (!fetchRealAPI)
+      return new Promise<void>((resolve, reject) => { resolve() })
+    
     // return fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/abc.jpeg")             // image
-    // return fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf")   // pdf
     return fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf")   // pdf
       .then(response => response.blob())
       .then(pdfBlob => URL.createObjectURL(pdfBlob))
       .catch(error => console.log('error', error));
-      
-      
-    // return fetch("https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf")
-    //   .then(r => r.blob())
-    //   .then(blobFile => new File([blobFile], "fileNameGoesHere", { type: "image/png" }));
   }
+  
   
   return {jobsArr, fetchJobs, addJob, postResumeToS3, getResumeFromS3};
 }

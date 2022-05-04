@@ -14,7 +14,7 @@ interface UserInput {
   applied: string;
   appUrl: string;
   reason: string;
-  resumeFile: File | null;
+  resumeFile?: File;
 }
 
 const todaysDate = new Date().toISOString().substring(0, 10);
@@ -39,7 +39,7 @@ const NewJobForm = (props: Props) => {
     applied: todaysDate,
     appUrl: '',
     reason: '',
-    resumeFile: null
+    resumeFile: undefined
   });
   
 
@@ -78,15 +78,24 @@ const NewJobForm = (props: Props) => {
       resume: '',
       resumeFile: resumeFile
     })
-    postResumeToS3(resumeFile).then(() => console.log("success"))
   }
 
   
-  function handleSubmit() {
+  async function handleSubmit() {
     const userAttachedFileAndDidntNameIt = userInput.resumeFile != null && userInput.resume.length == 0;
     if (userAttachedFileAndDidntNameIt) {
       console.error("You must enter the resume name before submitting.")
       return;
+    }
+    
+    if (userInput.resumeFile != undefined) {
+      try {
+        await postResumeToS3(userInput.resumeFile)
+        console.log("New resume successfully uploaded");
+      } catch(e: unknown) {
+        console.error("Failed to upload resume. Error: " + e);
+        throw new Error();
+      }
     }
     
     // ToDo: Validate all input. If Successful, then submit
@@ -100,6 +109,7 @@ const NewJobForm = (props: Props) => {
     });
     setUserInput(resetUserInput(userInput));
   }
+  
   
   return (
     <>
@@ -178,7 +188,7 @@ function resetUserInput(userInput: UserInput): UserInput {
     applied: userInput.applied,
     appUrl: '',
     reason: '',
-    resumeFile: null
+    resumeFile: undefined
   }
 }
 
