@@ -46,23 +46,25 @@ const NewJobForm = (props: Props) => {
   useEffect(() => {
     if (userInput.resume.length > 0) return;
     
-    setUserInput({
-      ...userInput,
-      resume: getMostRecentResumeName()
-    })
+    function setResumeFieldToMostRecentResume() {
+      setUserInput({
+        ...userInput,
+        resume: getMostRecentResume(props.jobsArr)
+      })
+    }
+    setResumeFieldToMostRecentResume();
   }, [props.jobsArr])
   
   
   // TODO: FIX - Function doesn't actually return most recent resume.
-  function getMostRecentResumeName(): string {
-    if (props.jobsArr.length === 0) return "";
+  function getMostRecentResume(jobsArr: Array<Job>): string {
+    if (jobsArr.length === 0) return "";
     
-    const resumes: string[] = props.jobsArr.map(j => j.resume);
+    const resumes: string[] = jobsArr.map(j => j.resume);
     const sortedResumes = resumes.sort((resumeA, resumeB) => {
       if (Number(resumeA) < Number(resumeB)) return 1;
       return -1;
     });
-    console.log(sortedResumes[0]);
     return sortedResumes[0];
   }
   
