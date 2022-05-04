@@ -41,6 +41,7 @@ const NewJobForm = (props: Props) => {
     reason: '',
     resumeFile: undefined
   });
+  const [error, setError] = useState<string>("");
   
 
   useEffect(() => {
@@ -84,7 +85,7 @@ const NewJobForm = (props: Props) => {
   async function handleSubmit() {
     const userAttachedFileAndDidntNameIt = userInput.resumeFile != null && userInput.resume.length == 0;
     if (userAttachedFileAndDidntNameIt) {
-      console.error("You must enter the resume name before submitting.")
+      setError("You must enter the resume name before submitting.")
       return;
     }
     
@@ -94,6 +95,7 @@ const NewJobForm = (props: Props) => {
         console.log("New resume successfully uploaded");
       } catch(e: unknown) {
         console.error("Failed to upload resume. Error: " + e);
+        setError("Failed to upload resume to server")
         throw new Error();
       }
     }
@@ -114,6 +116,8 @@ const NewJobForm = (props: Props) => {
   return (
     <>
       <form className="p-4 m-6 border-2 bg-amber-400 rounded-2xl border-amber-600">
+        
+        {error && <h5>{error}</h5>}
         
         <div className="flex">
           <div className="w-full px-3">
