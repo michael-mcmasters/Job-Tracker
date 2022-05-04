@@ -31,10 +31,16 @@ const NewJobForm = (props: Props) => {
   
   const [userInput, setUserInput] = useState<UserInput>(initialUserInput);
   const fileRef = useRef<File>();
+  const resumeInputRef = useRef<any>();
   const { postResumeToS3 } = useJobsAPI();
 
   // ToDo: Validate input. If Successful, then submit
   function handleSubmit() {
+    if (fileRef.current != null && resumeInputRef.current.value.length == 0) {
+      console.error("You must enter the resume name before submitting.")
+      return;
+    }
+    
     props.addJob({
       key: uuidv4(),
       company: userInput.company,
@@ -46,15 +52,27 @@ const NewJobForm = (props: Props) => {
     setUserInput(resetUserInput(userInput));
   }
   
+  
+
+  // Only have text field (no dropdown)
+  // Search resumes and show the most recent one
+  // Don't allow uploading file unless text field has a value. (Can't get value from resume, because resume is named "Michael McMasters Resume", not its date.)
+  
+  
   function getResumeNames(): Array<string> {
     const set = new Set<string>();
     for (let job of props.jobsArr) {
       set.add(job.resume);
     }
+    
     return Array.from(set).sort((resumeA, resumeB) => {
         if (Number(resumeA) < Number(resumeB)) return 1;
         return -1;
     });
+  }
+  
+  function getMostRecent() {
+    
   }
   
   function handleUploadResume(e: React.ChangeEvent<HTMLInputElement>) {
@@ -87,7 +105,7 @@ const NewJobForm = (props: Props) => {
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="resume">
               RESUME
             </label>
-            <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
+            <input ref={resumeInputRef} className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="resume" type="text" placeholder="4.11.2022" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
             <select name="resumeDropdown" id="resumeDropdown">
               {getResumeNames().map(n => (
