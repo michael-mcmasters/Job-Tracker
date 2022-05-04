@@ -5,6 +5,7 @@ import useJobsAPI from '../hooks/useJobsAPI';
 
 interface Props {
   addJob(job: Job): void;
+  jobsArr: Array<Job>;
 }
 
 interface UserInput {
@@ -45,7 +46,18 @@ const NewJobForm = (props: Props) => {
     setUserInput(resetUserInput(userInput));
   }
   
-  function handleUploadFile(e: React.ChangeEvent<HTMLInputElement>) {
+  function getResumeNames(): Array<string> {
+    const set = new Set<string>();
+    for (let job of props.jobsArr) {
+      set.add(job.resume);
+    }
+    return Array.from(set).sort((resumeA, resumeB) => {
+        if (Number(resumeA) < Number(resumeB)) return 1;
+        return -1;
+    });
+  }
+  
+  function handleUploadResume(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
 
     fileRef.current = e.target.files[0];
@@ -77,12 +89,12 @@ const NewJobForm = (props: Props) => {
             </label>
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="resume" type="text" placeholder="4.11.2022" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
-            {/* <input type="file" onChange={(e) => {
-              if (!e.target.files) return;
-              fileRef.current = e.target.files[0];
-              postResumeToS3(fileRef.current);
-            }} /> */}
-            <input type="file" onChange={handleUploadFile}/>
+            <select name="resumeDropdown" id="resumeDropdown">
+              {getResumeNames().map(n => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+            <input type="file" onChange={handleUploadResume}/>
           </div>
         </div>
         

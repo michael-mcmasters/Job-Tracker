@@ -20,7 +20,7 @@ function App() {
         <Routes>
             <Route path='/' element={
               <>
-                <NewJob addJob={addJob} />
+                <NewJob addJob={addJob} jobsArr={jobsArr} />
                 <JobEntries jobsArr={jobsArr} />
               </>
             } />
