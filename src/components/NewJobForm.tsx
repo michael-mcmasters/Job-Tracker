@@ -14,6 +14,7 @@ interface UserInput {
   applied: string;
   appUrl: string;
   reason: string;
+  resumeFile: File | null;
 }
 
 const todaysDate = new Date().toISOString().substring(0, 10);
@@ -22,7 +23,8 @@ const initialUserInput: UserInput = {
   resume: '',
   applied: todaysDate,
   appUrl: '',
-  reason: ''
+  reason: '',
+  resumeFile: null
 }
 
 // Problem: Can't get value from resume, because resume is named "Michael McMasters Resume", not its date.
@@ -38,7 +40,6 @@ const initialUserInput: UserInput = {
 const NewJobForm = (props: Props) => {
   
   const [userInput, setUserInput] = useState<UserInput>(initialUserInput);
-  const fileRef = useRef<File>();
   const { postResumeToS3 } = useJobsAPI();
   
 
@@ -71,18 +72,19 @@ const NewJobForm = (props: Props) => {
   function handleUploadResume(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
 
+    const resumeFile = e.target.files[0];
     setUserInput({
       ...userInput,
-      resume: ''
+      resume: '',
+      resumeFile: resumeFile
     })
-    fileRef.current = e.target.files[0];
-    postResumeToS3(fileRef.current).then(() => console.log("success"))
+    postResumeToS3(resumeFile).then(() => console.log("success"))
   }
 
   
   function handleSubmit() {
-    // if (fileRef.current != null && resumeInputRef.current.value.length == 0) {
-    if (fileRef.current != null && userInput.resume.length == 0) {
+    const userAttachedFileAndDidntNameIt = userInput.resumeFile != null && userInput.resume.length == 0;
+    if (userAttachedFileAndDidntNameIt) {
       console.error("You must enter the resume name before submitting.")
       return;
     }
