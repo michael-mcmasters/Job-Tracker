@@ -107,48 +107,32 @@ const NewJobForm = (props: Props) => {
         {error && <h5>{error}</h5>}
         
         <div className="flex flex-col md:flex-row">
-          <div className="w-full mx-3">
+          <div className="w-full px-3">
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="company">
               COMPANY
             </label>
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="company" type="text" placeholder="Zillow" value={userInput.company} onChange={e => {setUserInput({...userInput, company: e.target.value})}} />
           </div>
-          <div className="w-full mx-3">
+          <div className="w-full px-3">
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="applied">
               APPLIED
             </label>
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="applied" type="date" value={userInput.applied} onChange={e => { setUserInput({ ...userInput, applied: e.target.value }) }}/>
           </div>
-          {/* <div className="w-full px-3">
-            <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="resume">
-              RESUME
-            </label>
-            <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
-              id="resume" type="text" placeholder="" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
-            <input type="file" onChange={handleAttachResume}/>
-          </div> */}
-          
-          {/* <div className="flex-auto w-full p-0 mx-3 border border-green-900"> */}
-          <div className="flex-auto w-full p-0 mx-3">
+          <div className="flex-auto w-full p-0 px-3">
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="resume">
               RESUME
             </label>
             <div className="">
+              {/* <input type="file"> is hidden because it can't be easily styled. Instead a button is shown which presses this input */}
               <input ref={fileUploadRef} type="file" style={{ display: 'none' }} />
               <input className="w-full px-4 py-2 pr-10 text-gray-700 bg-gray-200 border border-r-0 border-red-500 rounded-l appearance-none focus:outline-none focus:bg-white" />
-              <button className="absolute p-2 px-4 font-bold text-gray-800 bg-gray-300 border border-l-0 border-yellow-500 rounded-r right-12" onClick={() => fileUploadRef.current.click()}>U</button>
+              <button className="absolute p-2 px-4 font-bold text-gray-800 bg-gray-300 border border-l-0 border-yellow-500 rounded-r right-12"
+                onClick={() => fileUploadRef.current.click()}>U</button>
             </div>
           </div>
-          
-          {/* <div className="w-full px-3">
-            <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="app-url">
-              APPLICATION URL
-            </label>
-            <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
-              id="app-url" type="text" placeholder="abc.com/jobs" value={userInput.appUrl} onChange={e => { setUserInput({ ...userInput, appUrl: e.target.value }) }} />
-          </div> */}
         </div>
         
         <div className="flex mt-3">
