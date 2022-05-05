@@ -41,6 +41,7 @@ const NewJobForm = (props: Props) => {
     resumeFile: undefined
   });
   const { postResumeToS3 } = useJobsAPI();
+  const fileUploadRef = useRef<any>();
   const [error, setError] = useState<string>("");
   
 
@@ -101,7 +102,7 @@ const NewJobForm = (props: Props) => {
   
   return (
     <>
-      <form className="p-4 m-6 border-2 bg-amber-400 rounded-2xl border-amber-600">
+      <div className="p-4 m-6 border-2 bg-amber-400 rounded-2xl border-amber-600">
         
         {error && <h5>{error}</h5>}
         
@@ -120,23 +121,53 @@ const NewJobForm = (props: Props) => {
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="applied" type="date" value={userInput.applied} onChange={e => { setUserInput({ ...userInput, applied: e.target.value }) }}/>
           </div>
-          <div className="w-full px-3">
+          {/* <div className="w-full px-3">
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="resume">
               RESUME
             </label>
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="resume" type="text" placeholder="" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
             <input type="file" onChange={handleAttachResume}/>
-          </div>
-        </div>
-        
-        <div className="flex mt-3">
+          </div> */}
           <div className="w-full px-3">
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="app-url">
               APPLICATION URL
             </label>
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="app-url" type="text" placeholder="abc.com/jobs" value={userInput.appUrl} onChange={e => { setUserInput({ ...userInput, appUrl: e.target.value }) }} />
+          </div>
+        </div>
+        
+        {/* <div className="flex mt-3">
+          <div className="w-full px-3">
+            <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="resume">
+              RESUME
+            </label>
+            <input className="inline-block w-1/2 px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
+              id="resume" type="text" placeholder="" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
+            <input className="inline-block w-1/2" type="file" onChange={handleAttachResume} />
+          </div>
+        </div> */}
+
+        
+        <div className="flex mt-3">
+          <div className="w-full px-3">
+            <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="resume">
+              RESUME
+            </label>
+            <div className="">
+              {/* <input className="inline-block" type="file" onChange={handleAttachResume} /> */}
+              
+              {/* <input ref={fileUploadRef} type="file" style={{ display: 'none' }} /> */}
+              {/* <button className="px-4 py-2 bg-gray-300 border rounded-md" type="button" onClick={() => fileUploadRef.current.click()}>Upload file...</button> */}
+              
+              {/* <input className="inline-block w-1/2 px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-l-0 border-red-500 rounded appearance-none focus:outline-none focus:bg-white" */}
+                {/* id="resume" type="text" placeholder="" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} /> */}
+                
+              <input ref={fileUploadRef} type="file" style={{ display: 'none' }} />
+              <input className="px-4 py-2 mb-3 text-gray-700 bg-gray-200 border border-r-0 border-red-500 rounded-l appearance-none focus:outline-none focus:bg-white" />
+              <button className="p-2 px-4 font-bold text-gray-800 bg-gray-300 border border-l-0 border-yellow-500 rounded-r" onClick={() => fileUploadRef.current.click()}>Upload</button>
+            </div>
           </div>
         </div>
         
@@ -156,7 +187,7 @@ const NewJobForm = (props: Props) => {
           </button>
         </div>
         
-      </form>
+      </div>
     </>
   );
 };
