@@ -20,15 +20,10 @@ interface UserInput {
 const todaysDate = new Date().toISOString().substring(0, 10);
 
 
-// Problem: Can't get value from resume, because resume is named "Michael McMasters Resume", not its date.
-// -
-// On app load:
-// Resume Text field has most recent resume name
-// -
-// On upload resume
-// Resume Text field goes blank
-// -
-// On submit, get error if you didn't put text in text field.
+// TODO: On resume upload:
+// - Show file name in input field
+// - Blur (focus) into field and highlight all text
+// - User can type a new name, or press enter to accept
 
 const NewJobForm = (props: Props) => {
   
@@ -86,6 +81,7 @@ const NewJobForm = (props: Props) => {
         throw new Error();
       }
     }
+    console.log(userInput.resumeFile);
     
     // ToDo: Validate all input. If Successful, then submit
     props.addJob({
@@ -127,8 +123,9 @@ const NewJobForm = (props: Props) => {
             </label>
             <div className="">
               {/* <input type="file"> is hidden because it can't be easily styled. Instead a button is shown which presses this input */}
-              <input ref={fileUploadRef} type="file" style={{ display: 'none' }} />
-              <input className="w-full px-4 py-2 pr-10 text-gray-700 bg-gray-200 border border-r-0 border-red-500 rounded-l appearance-none focus:outline-none focus:bg-white" />
+              <input ref={fileUploadRef} type="file" onChange={handleAttachResume} style={{ display: 'none' }} />
+              <input className="w-full px-4 py-2 pr-10 text-gray-700 bg-gray-200 border border-r-0 border-red-500 rounded-l appearance-none focus:outline-none focus:bg-white"
+                id="resume" type="text" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
               <button className="absolute p-2 px-4 font-bold text-gray-800 bg-gray-300 border border-l-0 border-yellow-500 rounded-r right-12"
                 onClick={() => fileUploadRef.current.click()}>U</button>
             </div>
