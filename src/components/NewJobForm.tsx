@@ -111,7 +111,7 @@ const NewJobForm = (props: Props) => {
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="company">
               COMPANY
             </label>
-            <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
+            <input className="block w-full px-4 py-2 mb-3 text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="company" type="text" placeholder="Zillow" value={userInput.company} onChange={e => {setUserInput({...userInput, company: e.target.value})}} />
           </div>
           <div className="w-full px-3">
@@ -140,7 +140,7 @@ const NewJobForm = (props: Props) => {
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="app-url">
               APPLICATION URL
             </label>
-            <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
+            <input className="block w-full px-4 py-2 mb-3 text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="app-url" type="text" placeholder="abc.com/jobs" value={userInput.appUrl} onChange={e => { setUserInput({ ...userInput, appUrl: e.target.value }) }} />
           </div>
         </div>
@@ -150,7 +150,7 @@ const NewJobForm = (props: Props) => {
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="reason-applied">
               REASON APPLIED
             </label>
-            <textarea className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
+            <textarea className="block w-full px-4 py-2 mb-3 text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="reason-applied" placeholder="Exciting culture, perfect tech stack, healthy work life balance" value={userInput.reason} onChange={e => { setUserInput({ ...userInput, reason: e.target.value }) }} />
           </div>
         </div>
