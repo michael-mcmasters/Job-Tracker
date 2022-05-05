@@ -58,7 +58,7 @@ const NewJobForm = (props: Props) => {
     const resumeFile = e.target.files[0];
     setUserInput({
       ...userInput,
-      resume: '',
+      resume: resumeFile.name,
       resumeFile: resumeFile
     })
   }
