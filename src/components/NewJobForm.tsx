@@ -130,14 +130,15 @@ const NewJobForm = (props: Props) => {
             <input type="file" onChange={handleAttachResume}/>
           </div> */}
           
-          <div className="flex-auto w-full p-0 mx-3 border border-green-900">
+          {/* <div className="flex-auto w-full p-0 mx-3 border border-green-900"> */}
+          <div className="flex-auto w-full p-0 mx-3">
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="resume">
               RESUME
             </label>
             <div className="">
               <input ref={fileUploadRef} type="file" style={{ display: 'none' }} />
-              <input className="px-4 py-2 text-gray-700 bg-gray-200 border border-r-0 border-red-500 rounded-l appearance-none w-fill focus:outline-none focus:bg-white" />
-              <button className="p-2 px-4 font-bold text-gray-800 bg-gray-300 border border-l-0 border-yellow-500 rounded-r" onClick={() => fileUploadRef.current.click()}>U</button>
+              <input className="w-full px-4 py-2 pr-10 text-gray-700 bg-gray-200 border border-r-0 border-red-500 rounded-l appearance-none focus:outline-none focus:bg-white" />
+              <button className="absolute p-2 px-4 font-bold text-gray-800 bg-gray-300 border border-l-0 border-yellow-500 rounded-r right-12" onClick={() => fileUploadRef.current.click()}>U</button>
             </div>
           </div>
           
