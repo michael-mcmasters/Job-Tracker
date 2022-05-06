@@ -33,19 +33,20 @@ export default function useJobsAPI() {
     }
   }
   
-  function addJob(job: JobType) {
+  
+  function postJob(job: JobType) {
     setJobsArr([...jobsArr, job])
     
     if (!fetchRealAPI) {
       return;
     }
       
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "text/plain");
+    const headers = new Headers();
+    headers.append("Content-Type", "text/plain");
 
-    const requestOptions = {
+    const requestOptions: RequestInit = {
       method: 'POST',
-      headers: myHeaders,
+      headers: headers,
       body: JSON.stringify(job)
     };
     
@@ -55,5 +56,37 @@ export default function useJobsAPI() {
       .catch(error => console.log('error', error));
   }
   
-  return {jobsArr, fetchJobs, addJob};
+  
+  function postResumeToS3(file: File): Promise<string | void> {
+    if (!fetchRealAPI)
+      return new Promise<void>((resolve, reject) => {resolve()})
+    
+    const headers = new Headers();
+    headers.append("Content-Type", "application/pdf");
+
+    const requestOptions: RequestInit = {
+      method: 'PUT',
+      headers: headers,
+      body: file
+    };
+    
+    return fetch("https://wlxw76ft60.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf", requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
+  }
+  
+  
+  function getResumeFromS3(fileName: string): Promise<string | void> {
+    if (!fetchRealAPI)
+      return new Promise<string>((resolve, reject) => { resolve("") })
+    
+    return fetch(`https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/${fileName}`)
+      .then(response => response.blob())
+      .then(pdfBlob => URL.createObjectURL(pdfBlob))
+      .catch(error => console.log('error', error));
+  }
+  
+  
+  return {jobsArr, fetchJobs, postJob, postResumeToS3, getResumeFromS3};
 }
