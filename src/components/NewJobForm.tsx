@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Job from '../models/Job';
 import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
-  addJob(job: Job): void;
+  postJob(job: Job): void;
+  postResumeToS3(file: File): Promise<string | void>;
+  jobsArr: Array<Job>;
 }
 
 interface UserInput {
@@ -12,26 +14,72 @@ interface UserInput {
   applied: string;
   appUrl: string;
   reason: string;
+  resumeFile?: File;
 }
 
 const todaysDate = new Date().toISOString().substring(0, 10);
 
-const initialUserInput: UserInput = {
-  company: '',
-  resume: '',
-  applied: todaysDate,
-  appUrl: '',
-  reason: ''
-}
-
 
 const NewJobForm = (props: Props) => {
   
-  const [userInput, setUserInput] = useState<UserInput>(initialUserInput);
+  const [ userInput, setUserInput ] = useState<UserInput>({
+    company: '',
+    resume: '',
+    applied: todaysDate,
+    appUrl: '',
+    reason: '',
+    resumeFile: undefined
+  });
+  const fileUploadRef = useRef<any>();
+  const resumeFieldRef = useRef<any>();
+  const [ error, setError ] = useState<string>("");
+  
 
-  // ToDo: Validate input. If Successful, then submit
-  function handleSubmit() {
-    props.addJob({
+  useEffect(() => {
+    (function setResumeField() {
+      if (userInput.resume.length !== 0) return;
+      
+      setUserInput({
+        ...userInput,
+        resume: findMostRecentResume(props.jobsArr)
+      })
+    })()
+  }, [props.jobsArr])
+  
+  
+  function handleAttachResume(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files) return;
+
+    const resumeFile = e.target.files[0];
+    setUserInput({
+      ...userInput,
+      resume: resumeFile.name,
+      resumeFile: resumeFile
+    });
+
+    resumeFieldRef.current.focus();
+    setTimeout(() => resumeFieldRef.current.select());
+  }
+
+  
+  async function handleSubmit() {
+    const userAttachedFileAndDidntNameIt = userInput.resumeFile != null && userInput.resume.length == 0;
+    if (userAttachedFileAndDidntNameIt) {
+      setError("You must enter the resume name before submitting.")
+      return;
+    }
+    
+    if (userInput.resumeFile != undefined) {
+      try {
+        await props.postResumeToS3(userInput.resumeFile)
+      } catch(e: unknown) {
+        setError("Failed to upload resume to server")
+        throw new Error();
+      }
+    }
+    
+    // ToDo: Validate all input. If Successful, then submit
+    props.postJob({
       key: uuidv4(),
       company: userInput.company,
       resume: userInput.resume,
@@ -39,19 +87,23 @@ const NewJobForm = (props: Props) => {
       reason: userInput.reason,
       appUrl: userInput.appUrl
     });
+    
     setUserInput(resetUserInput(userInput));
   }
   
+  
   return (
     <>
-      <form className="p-4 m-6 border-2 bg-amber-400 rounded-2xl border-amber-600">
+      <div className="p-4 m-6 border-2 bg-amber-400 rounded-2xl border-amber-600">
         
-        <div className="flex">
+        {error && <h5>{error}</h5>}
+        
+        <div className="flex flex-col md:flex-row">
           <div className="w-full px-3">
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="company">
               COMPANY
             </label>
-            <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
+            <input className="block w-full px-4 py-2 mb-3 text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="company" type="text" placeholder="Zillow" value={userInput.company} onChange={e => {setUserInput({...userInput, company: e.target.value})}} />
           </div>
           <div className="w-full px-3">
@@ -61,12 +113,18 @@ const NewJobForm = (props: Props) => {
             <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="applied" type="date" value={userInput.applied} onChange={e => { setUserInput({ ...userInput, applied: e.target.value }) }}/>
           </div>
-          <div className="w-full px-3">
+          <div className="flex-auto w-full p-0 px-3">
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="resume">
               RESUME
             </label>
-            <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
-              id="resume" type="text" placeholder="4.11.2022" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
+            <div className="">
+              {/* <input type="file"> is hidden because it can't be easily styled. Instead a button is shown which presses this input */}
+              <input ref={fileUploadRef} type="file" onChange={handleAttachResume} style={{ display: 'none' }} />
+              <input ref={resumeFieldRef} className="w-full px-4 py-2 pr-10 text-gray-700 bg-gray-200 border border-r-0 border-red-500 rounded-l appearance-none focus:outline-none focus:bg-white"
+                id="resume" type="text" placeholder="Companies/5.10.22-Amazon" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
+              <button className="absolute p-2 px-4 font-bold text-gray-800 bg-gray-300 border border-l-0 border-yellow-500 rounded-r right-12"
+                onClick={() => fileUploadRef.current.click()}>U</button>
+            </div>
           </div>
         </div>
         
@@ -75,7 +133,7 @@ const NewJobForm = (props: Props) => {
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="app-url">
               APPLICATION URL
             </label>
-            <input className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
+            <input className="block w-full px-4 py-2 mb-3 text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="app-url" type="text" placeholder="abc.com/jobs" value={userInput.appUrl} onChange={e => { setUserInput({ ...userInput, appUrl: e.target.value }) }} />
           </div>
         </div>
@@ -85,7 +143,7 @@ const NewJobForm = (props: Props) => {
             <label className="block mb-1 text-xs font-bold text-gray-700" htmlFor="reason-applied">
               REASON APPLIED
             </label>
-            <textarea className="block w-full px-4 py-2 mb-3 leading-tight text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
+            <textarea className="block w-full px-4 py-2 mb-3 text-gray-700 bg-gray-200 border border-red-500 rounded appearance-none focus:outline-none focus:bg-white"
               id="reason-applied" placeholder="Exciting culture, perfect tech stack, healthy work life balance" value={userInput.reason} onChange={e => { setUserInput({ ...userInput, reason: e.target.value }) }} />
           </div>
         </div>
@@ -96,10 +154,23 @@ const NewJobForm = (props: Props) => {
           </button>
         </div>
         
-      </form>
+      </div>
     </>
   );
 };
+
+
+// TODO: FIX - Function doesn't actually return most recent resume.
+function findMostRecentResume(jobsArr: Array<Job>): string {
+  if (jobsArr.length === 0) return "";
+
+  const resumes: string[] = jobsArr.map(j => j.resume);
+  const sortedResumes = resumes.sort((resumeA, resumeB) => {
+    if (Number(resumeA) < Number(resumeB)) return 1;
+    return -1;
+  });
+  return sortedResumes[0];
+}
 
 
 // Date comes in formatted as 2022-04-11, this returns it formatted as 4.11.22
@@ -111,12 +182,17 @@ function formatDate(date: string): string {
   return `${month}.${day}.${last2DigitsOfYear}`;
 }
 
+
 function resetUserInput(userInput: UserInput): UserInput {
   return {
-    ...initialUserInput,
-    applied: userInput.applied
-  };
+    company: '',
+    resume: userInput.resume,
+    applied: userInput.applied,
+    appUrl: '',
+    reason: '',
+    resumeFile: undefined
+  }
 }
 
-export default NewJobForm
-;
+
+export default NewJobForm;

@@ -2,11 +2,13 @@ import { useEffect } from 'react';
 import styles from './styles/App.module.css';
 import NewJob from './components/NewJobForm';
 import JobEntries from './components/Jobs';
+import PDFViewer from './components/PDFViewer';
 import useJobsAPI from './hooks/useJobsAPI';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   
-  const { jobsArr, fetchJobs, addJob } = useJobsAPI();
+  const { jobsArr, fetchJobs, postJob, postResumeToS3 } = useJobsAPI();
   
   useEffect(() => {
     fetchJobs();
@@ -14,8 +16,19 @@ function App() {
   
   return (
     <div className={styles.App}>
-      <NewJob addJob={addJob}/>
-      <JobEntries jobsArr={jobsArr} />
+      <BrowserRouter>
+        <Routes>
+            <Route path='/' element={
+              <>
+                <NewJob postJob={postJob} postResumeToS3={postResumeToS3} jobsArr={jobsArr} />
+                <JobEntries jobsArr={jobsArr} />
+              </>
+            } />
+        </Routes>
+        <Routes>
+          <Route path='/resume-viewer/:resumeFileName' element={<PDFViewer />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
