@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {default as JobType} from "../models/Job"
 import useJobsAPI from '../hooks/useJobsAPI';
 
-
 interface Props {
   job: JobType;
 }
