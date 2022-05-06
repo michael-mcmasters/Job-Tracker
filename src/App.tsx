@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   
-  const { jobsArr, fetchJobs, postJob, postResumeToS3 } = useJobsAPI();
+  const { jobsArr, fetchJobs, postJob, getResumeFromS3, postResumeToS3 } = useJobsAPI();
   
   useEffect(() => {
     fetchJobs();
@@ -26,7 +26,7 @@ function App() {
             } />
         </Routes>
         <Routes>
-          <Route path='/resume-viewer/:resumeFileName' element={<PDFViewer />} />
+          <Route path='/resume-viewer/:resumeFileName' element={<PDFViewer getResumeFromS3={getResumeFromS3} />} />
         </Routes>
       </BrowserRouter>
     </div>

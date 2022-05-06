@@ -11,9 +11,8 @@ export default function useJobsAPI() {
   const [jobsArr, setJobsArr] = useState<Array<JobType>>([]);
   
   async function fetchJobs() {
-    await randomDelay();
-    
     if (!fetchRealAPI) {
+      await randomDelay();
       setJobsArr(fakeJobsJSON.jobs);
       return;
     }

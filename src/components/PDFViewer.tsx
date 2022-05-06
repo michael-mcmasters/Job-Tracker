@@ -2,19 +2,22 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useJobsAPI from '../hooks/useJobsAPI';
 
+interface Props {
+  getResumeFromS3(fileName: string): Promise<string | void>;
+}
+
 // Fetches resume PDF from s3, creates Object URL for it, then redirects to that URL.
-const PDFViewer = (props: any) => {
+const PDFViewer = (props: Props) => {
   const { resumeFileName } = useParams();
-  const { getResumeFromS3 } = useJobsAPI();   // Pass resumeName to getResumeFromS3 to get the specific resume.
   const [ resumeObjectURL, setResumeObjectURL ] = useState<string>();
-  const anchorRef = useRef<any>();
   const [ error, setError ] = useState<string>("");
+  const anchorRef = useRef<any>();
   
   
   useEffect(() => {
     (async function fetchResumePDF() {
       try {
-        const resume = await getResumeFromS3(String(resumeFileName));
+        const resume = await props.getResumeFromS3(String(resumeFileName));
         if (resume !== undefined && resume !== "") {
           setResumeObjectURL(String(resume));
         } else {
