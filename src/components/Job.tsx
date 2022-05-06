@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import {default as JobType} from "../models/Job"
-import useJobsAPI from '../hooks/useJobsAPI';
 
 interface Props {
   job: JobType;
 }
 
 const Job = (props: Props) => {
+  
+  // Replaces slashes (/) with colons (:) to match s3 file keys.
+  // Also because the extra slash breaks React Router. (Can't find /resume-viewer/companies/amazon.)
+  function formatResumeName() {
+    const formatted = props.job.resume.replaceAll("/", ":");
+    return `${formatted}.pdf`
+  }
   
   return (
     <>  
@@ -17,7 +23,8 @@ const Job = (props: Props) => {
         <div className=""><span className="font-bold text-purple-800">Application URL: </span><a href={props.job.appUrl}>{props.job.appUrl}</a></div>
         <div className=""><span className="font-bold text-purple-800">Reason: </span> {props.job.reason}</div>
         
-        <a href={'/resume-viewer/first-file.pdf'} target="_blank" rel="noreferrer">Show Resume</a>
+        {/* <a href={'/resume-viewer/first-file.pdf'} target="_blank" rel="noreferrer">Show Resume</a> */}
+        <a href={`/resume-viewer/${formatResumeName()}`} target="_blank" rel="noreferrer">Show Resume</a>
       </div>
     </>
   );

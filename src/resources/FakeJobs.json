@@ -4,7 +4,7 @@
       "key": "0",
       "company": "Microsoft",
       "applied": "12.31.22",
-      "resume": "12.31.21",
+      "resume": "Companies/4.21.22-GoLinks",
       "reason": "Created Typescript and C#, my favourite language",
       "appUrl": "Microsoft.com/jobs"
     },
@@ -12,7 +12,7 @@
       "key": "1",
       "company": "Remix",
       "applied": "5.2.22",
-      "resume": "5.2.22",
+      "resume": "Companies/4.6.22-InDebted",
       "reason": "Great customer and company culture. Love their tech stack.",
       "appUrl": "InDepted.com/jobs"
     },
@@ -20,7 +20,7 @@
       "key": "2",
       "company": "Zillow",
       "applied": "5.10.22",
-      "resume": "5.10.22",
+      "resume": "3.26.22",
       "reason": "Seems like a fun company",
       "appUrl": "https: //careers.zillowgroup.com/job/13901012/frontend-software-engineer-remote/"
     },
@@ -28,7 +28,7 @@
       "key": "3",
       "company": "NVidia",
       "applied": "1.27.22",
-      "resume": "1.27.22",
+      "resume": "2.9.22",
       "reason": "Highly raited company",
       "appUrl": "nvidia.com"
     },
@@ -36,7 +36,7 @@
       "key": "4",
       "company": "Google",
       "applied": "3.11.22",
-      "resume": "3.11.22",
+      "resume": "3.27.22",
       "reason": "The OG best company",
       "appUrl": "google.com/jobs"
     }

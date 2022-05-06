@@ -121,7 +121,7 @@ const NewJobForm = (props: Props) => {
               {/* <input type="file"> is hidden because it can't be easily styled. Instead a button is shown which presses this input */}
               <input ref={fileUploadRef} type="file" onChange={handleAttachResume} style={{ display: 'none' }} />
               <input ref={resumeFieldRef} className="w-full px-4 py-2 pr-10 text-gray-700 bg-gray-200 border border-r-0 border-red-500 rounded-l appearance-none focus:outline-none focus:bg-white"
-                id="resume" type="text" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
+                id="resume" type="text" placeholder="Companies/5.10.22-Amazon" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
               <button className="absolute p-2 px-4 font-bold text-gray-800 bg-gray-300 border border-l-0 border-yellow-500 rounded-r right-12"
                 onClick={() => fileUploadRef.current.click()}>U</button>
             </div>
