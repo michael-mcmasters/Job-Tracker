@@ -3,7 +3,7 @@ import Job from '../models/Job';
 import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
-  addJob(job: Job): void;
+  postJob(job: Job): void;
   postResumeToS3(file: File): Promise<string | void>;
   jobsArr: Array<Job>;
 }
@@ -79,7 +79,7 @@ const NewJobForm = (props: Props) => {
     }
     
     // ToDo: Validate all input. If Successful, then submit
-    props.addJob({
+    props.postJob({
       key: uuidv4(),
       company: userInput.company,
       resume: userInput.resume,

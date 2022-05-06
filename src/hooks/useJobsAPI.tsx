@@ -34,7 +34,7 @@ export default function useJobsAPI() {
   }
   
   
-  function addJob(job: JobType) {
+  function postJob(job: JobType) {
     setJobsArr([...jobsArr, job])
     
     if (!fetchRealAPI) {
@@ -90,5 +90,5 @@ export default function useJobsAPI() {
   }
   
   
-  return {jobsArr, fetchJobs, addJob, postResumeToS3, getResumeFromS3};
+  return {jobsArr, fetchJobs, postJob, postResumeToS3, getResumeFromS3};
 }
