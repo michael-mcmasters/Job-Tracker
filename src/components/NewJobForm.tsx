@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Job from '../models/Job';
 import { v4 as uuidv4 } from 'uuid';
-import useJobsAPI from '../hooks/useJobsAPI';
 
 interface Props {
   addJob(job: Job): void;
+  postResumeToS3(file: File): Promise<string | void>;
   jobsArr: Array<Job>;
 }
 
@@ -20,14 +20,9 @@ interface UserInput {
 const todaysDate = new Date().toISOString().substring(0, 10);
 
 
-// TODO: On resume upload:
-// - Show file name in input field
-// - Blur (focus) into field and highlight all text
-// - User can type a new name, or press enter to accept
-
 const NewJobForm = (props: Props) => {
   
-  const [userInput, setUserInput] = useState<UserInput>({
+  const [ userInput, setUserInput ] = useState<UserInput>({
     company: '',
     resume: '',
     applied: todaysDate,
@@ -35,14 +30,14 @@ const NewJobForm = (props: Props) => {
     reason: '',
     resumeFile: undefined
   });
-  const { postResumeToS3 } = useJobsAPI();
   const fileUploadRef = useRef<any>();
-  const [error, setError] = useState<string>("");
+  const resumeFieldRef = useRef<any>();
+  const [ error, setError ] = useState<string>("");
   
 
   useEffect(() => {
-    (function setResumeFieldToMostRecentResume() {
-      if (userInput.resume.length > 0) return;
+    (function setResumeField() {
+      if (userInput.resume.length !== 0) return;
       
       setUserInput({
         ...userInput,
@@ -60,7 +55,10 @@ const NewJobForm = (props: Props) => {
       ...userInput,
       resume: resumeFile.name,
       resumeFile: resumeFile
-    })
+    });
+
+    resumeFieldRef.current.focus();
+    setTimeout(() => resumeFieldRef.current.select());
   }
 
   
@@ -73,15 +71,12 @@ const NewJobForm = (props: Props) => {
     
     if (userInput.resumeFile != undefined) {
       try {
-        await postResumeToS3(userInput.resumeFile)
-        console.log("New resume successfully uploaded");
+        await props.postResumeToS3(userInput.resumeFile)
       } catch(e: unknown) {
-        console.error("Failed to upload resume. Error: " + e);
         setError("Failed to upload resume to server")
         throw new Error();
       }
     }
-    console.log(userInput.resumeFile);
     
     // ToDo: Validate all input. If Successful, then submit
     props.addJob({
@@ -92,6 +87,7 @@ const NewJobForm = (props: Props) => {
       reason: userInput.reason,
       appUrl: userInput.appUrl
     });
+    
     setUserInput(resetUserInput(userInput));
   }
   
@@ -124,7 +120,7 @@ const NewJobForm = (props: Props) => {
             <div className="">
               {/* <input type="file"> is hidden because it can't be easily styled. Instead a button is shown which presses this input */}
               <input ref={fileUploadRef} type="file" onChange={handleAttachResume} style={{ display: 'none' }} />
-              <input className="w-full px-4 py-2 pr-10 text-gray-700 bg-gray-200 border border-r-0 border-red-500 rounded-l appearance-none focus:outline-none focus:bg-white"
+              <input ref={resumeFieldRef} className="w-full px-4 py-2 pr-10 text-gray-700 bg-gray-200 border border-r-0 border-red-500 rounded-l appearance-none focus:outline-none focus:bg-white"
                 id="resume" type="text" value={userInput.resume} onChange={e => { setUserInput({ ...userInput, resume: e.target.value }) }} />
               <button className="absolute p-2 px-4 font-bold text-gray-800 bg-gray-300 border border-l-0 border-yellow-500 rounded-r right-12"
                 onClick={() => fileUploadRef.current.click()}>U</button>

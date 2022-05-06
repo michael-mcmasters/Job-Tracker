@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   
-  const { jobsArr, fetchJobs, addJob } = useJobsAPI();
+  const { jobsArr, fetchJobs, addJob, postResumeToS3 } = useJobsAPI();
   
   useEffect(() => {
     fetchJobs();
@@ -20,7 +20,7 @@ function App() {
         <Routes>
             <Route path='/' element={
               <>
-                <NewJob addJob={addJob} jobsArr={jobsArr} />
+                <NewJob addJob={addJob} postResumeToS3={postResumeToS3} jobsArr={jobsArr} />
                 <JobEntries jobsArr={jobsArr} />
               </>
             } />
