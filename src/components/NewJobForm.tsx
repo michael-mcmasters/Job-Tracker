@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
   postJob(job: Job): void;
-  postResumeToS3(file: File): Promise<string | void>;
+  postResumeToS3(file: File, fileName: string): Promise<string | void>;
   jobsArr: Array<Job>;
 }
 
@@ -71,7 +71,7 @@ const NewJobForm = (props: Props) => {
     
     if (userInput.resumeFile != undefined) {
       try {
-        await props.postResumeToS3(userInput.resumeFile)
+        await props.postResumeToS3(userInput.resumeFile, userInput.resume)
       } catch(e: unknown) {
         setError("Failed to upload resume to server")
         throw new Error();

@@ -51,12 +51,12 @@ export default function useJobsAPI() {
     
     fetch("https://igefue8jt4.execute-api.us-east-1.amazonaws.com/", requestOptions)
       .then(response => response.text())
-      .then(result => console.log("API Result is " + result))
+      .then(result => console.log("Job posted to server: " + result))
       .catch(error => console.log('error', error));
   }
   
   
-  function postResumeToS3(file: File): Promise<string | void> {
+  function postResumeToS3(file: File, fileName: string): Promise<string | void> {
     if (!fetchRealAPI)
       return new Promise<void>((resolve, reject) => {resolve()})
     
@@ -69,9 +69,9 @@ export default function useJobsAPI() {
       body: file
     };
     
-    return fetch("https://wlxw76ft60.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/first-file.pdf", requestOptions)
+    return fetch(`https://wlxw76ft60.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/${fileName}.pdf`, requestOptions)
       .then(response => response.text())
-      .then(result => console.log(result))
+      .then(result => console.log("Resume posted to s3: " + result))
       .catch(error => console.log('error', error));
   }
   
