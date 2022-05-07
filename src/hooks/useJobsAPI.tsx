@@ -18,17 +18,19 @@ export default function useJobsAPI() {
     }
     
     try {
-      const response: Response = await fetch('https://igefue8jt4.execute-api.us-east-1.amazonaws.com/', {
+        const response: Response = await fetch(String(process.env.REACT_APP_FETCH_JOBS_API), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         }
       });
+      console.log(response);
       const resJson = await response.json();
+      console.log(resJson);
       resJson.items.map((i: { key: string; uuid: string; }) => i.key = i.uuid);
       setJobsArr(resJson.items);
     } catch(exception: unknown) {
-      console.log('Error while fetching:', exception);
+      console.log('Error while fetching: ' + exception);
     }
   }
   
@@ -49,7 +51,7 @@ export default function useJobsAPI() {
       body: JSON.stringify(job)
     };
     
-    fetch("https://igefue8jt4.execute-api.us-east-1.amazonaws.com/", requestOptions)
+    fetch(String(process.env.REACT_APP_POST_JOB_API), requestOptions)
       .then(response => response.text())
       .then(result => console.log("Job posted to server: " + result))
       .catch(error => console.log('error', error));
@@ -63,13 +65,14 @@ export default function useJobsAPI() {
     const headers = new Headers();
     headers.append("Content-Type", "application/pdf");
 
+    const api = String(process.env.REACT_APP_POST_RESUME_API) + fileName + ".pdf";
     const requestOptions: RequestInit = {
       method: 'PUT',
       headers: headers,
       body: file
     };
     
-    return fetch(`https://wlxw76ft60.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/${fileName}.pdf`, requestOptions)
+    return fetch(api, requestOptions)
       .then(response => response.text())
       .then(result => console.log("Resume posted to s3: " + result))
       .catch(error => console.log('error', error));
@@ -80,7 +83,9 @@ export default function useJobsAPI() {
     if (!fetchRealAPI)
       return new Promise<string>((resolve, reject) => { resolve("") })
     
-    return fetch(`https://8rd8pikf9c.execute-api.us-east-1.amazonaws.com/prod/job-tracker-resumes/${fileName}`)
+    const api = String(process.env.REACT_APP_GET_RESUME_API) + fileName;
+      
+    return fetch(api)
       .then(response => response.blob())
       .then(pdfBlob => URL.createObjectURL(pdfBlob))
       .catch(error => console.log('error', error));
