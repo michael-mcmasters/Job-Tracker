@@ -10,19 +10,19 @@
     },
     {
       "key": "1",
-      "company": "Remix",
+      "company": "GitHub",
       "applied": "5.2.22",
       "resume": "Companies/4.6.22-InDebted",
       "reason": "Great customer and company culture. Love their tech stack.",
-      "appUrl": "InDepted.com/jobs"
+      "appUrl": "https://www.linkedin.com/jobs/view/3064656330/?alternateChannel=search&refId=gaQ2j0kvaHtA5u5fWGjbTg%3D%3D&trackingId=tA%2F3fyguQNCMFmPv0fYy2g%3D%3D"
     },
     {
       "key": "2",
       "company": "Zillow",
       "applied": "5.10.22",
       "resume": "3.26.22",
-      "reason": "Seems like a fun company",
-      "appUrl": "https: //careers.zillowgroup.com/job/13901012/frontend-software-engineer-remote/"
+      "reason": "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+      "appUrl": "https://careers.zillowgroup.com/job/13901012/frontend-software-engineer-remote/"
     },
     {
       "key": "3",

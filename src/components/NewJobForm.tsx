@@ -63,9 +63,13 @@ const NewJobForm = (props: Props) => {
 
   
   async function handleSubmit() {
-    const userAttachedFileAndDidntNameIt = userInput.resumeFile != null && userInput.resume.length == 0;
-    if (userAttachedFileAndDidntNameIt) {
-      setError("You must enter the resume name before submitting.")
+    if (userInput.company === "" || userInput.applied === "" || userInput.appUrl === "" || userInput.reason === "") {
+      setError("You must fill out all fields before submitting.")
+      return;
+    }
+    const didntNameAttachedResume = userInput.resumeFile != null && userInput.resume.length == 0;
+    if (didntNameAttachedResume) {
+      setError("You must give the resume a name before submitting.")
       return;
     }
     
@@ -89,6 +93,7 @@ const NewJobForm = (props: Props) => {
     });
     
     setUserInput(resetUserInput(userInput));
+    setError("");
   }
   
   
