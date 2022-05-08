@@ -27,10 +27,10 @@ const Job = (props: Props) => {
           </div>
           
           {/* Right flex box */}
-          <div className="ml-auto text-xs font-bold text-white bg-purple-500 border rounded-lg w-14">
+          <div className="ml-auto text-xs font-bold text-white bg-purple-500 border-2 border-purple-600 rounded-lg w-14">
             <a className="flex flex-col justify-center inline-block h-full" href={`/resume-viewer/${formatResumeName()}`} target="_blank" rel="noreferrer">
               <div className="pb-1 mx-auto">
-                5.7.22
+                {props.job.resume}
               </div>
             </a>
           </div>
