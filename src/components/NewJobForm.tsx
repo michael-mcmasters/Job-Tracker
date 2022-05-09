@@ -41,7 +41,7 @@ const NewJobForm = (props: Props) => {
       
       setUserInput({
         ...userInput,
-        resume: findMostRecentResume(props.jobsArr)
+        resume: findMostRecentResume(props.jobsArr.map(j => j.resume))
       })
     })()
   }, [props.jobsArr])
@@ -165,21 +165,33 @@ const NewJobForm = (props: Props) => {
 };
 
 
-// TODO: FIX - Function doesn't actually return most recent resume.
-function findMostRecentResume(jobsArr: Array<Job>): string {
-  if (jobsArr.length === 0) return "";
+function findMostRecentResume(resumes: Array<string>): string {
+  if (resumes.length === 0) return "";
 
-  const resumes: string[] = jobsArr.map(j => j.resume);
-  const sortedResumes = resumes.sort((resumeA, resumeB) => {
-    if (Number(resumeA) < Number(resumeB)) return 1;
-    return -1;
-  });
+  // Only returns resumes that contain nums and periods (such as 5.28.22).
+  const resumeNameIsADate = (resume: string) => {
+    for (let char of resume) {
+      if (char !== "." && !parseInt(char)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  const greatestToLowest = (resA: string, resB: string) => {
+    const toNumber = (r: string) => Number(r.replaceAll(".", ""));
+    if (toNumber(resA) < toNumber(resB)) return 1;
+    else return -1;
+  }
+
+  const sortedResumes = resumes.filter(resumeNameIsADate).sort((greatestToLowest));
   return sortedResumes[0];
 }
 
 
 // Date comes in formatted as 2022-04-11, this returns it formatted as 4.11.22
 function formatDate(date: string): string {
+  if (!date.includes("-")) return date;
+  
   const dateArr = date.split("-");
   const month = parseInt(dateArr[1]);   // parseInt removes '0' at beginning of string
   const day = parseInt(dateArr[2]);
