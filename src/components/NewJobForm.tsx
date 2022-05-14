@@ -41,7 +41,7 @@ const NewJobForm = (props: Props) => {
       
       setUserInput({
         ...userInput,
-        resume: findMostRecentResume(props.jobsArr)
+        resume: findMostRecentResume(props.jobsArr.map(j => j.resume))
       })
     })()
   }, [props.jobsArr])
@@ -165,21 +165,50 @@ const NewJobForm = (props: Props) => {
 };
 
 
-// TODO: FIX - Function doesn't actually return most recent resume.
-function findMostRecentResume(jobsArr: Array<Job>): string {
-  if (jobsArr.length === 0) return "";
+function findMostRecentResume(resumes: Array<string>): string {
+  if (resumes.length === 0) return "";
 
-  const resumes: string[] = jobsArr.map(j => j.resume);
-  const sortedResumes = resumes.sort((resumeA, resumeB) => {
-    if (Number(resumeA) < Number(resumeB)) return 1;
-    return -1;
-  });
+  // Only returns resumes that contain nums and periods (such as 5.28.22).
+  const resumeNameIsADate = (resume: string) => {
+    for (let char of resume) {
+      if (char !== "." && !parseInt(char)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  const greatestToLowest = (resA: string, resB: string) => {
+    if (toFormattedNumber(resA) < toFormattedNumber(resB)) return 1;
+    else return -1;
+  }
+
+  const sortedResumes = resumes.filter(resumeNameIsADate).sort((greatestToLowest));
+  console.log(sortedResumes);
   return sortedResumes[0];
+}
+
+
+// Takes date formatted as 10.14.22 and returns as a number, 101422
+// Makes sure all numbers between periods are 2 digits. So 5.4.2022 becomes 05.04.22 which becomes 050422
+function toFormattedNumber(dateStr: string) {
+  const split: string[] = dateStr.split(".");                 // [5, 4, 2022]
+  if (split[0].length === 1) {
+    split[0] = "0" + split[0];                                // 05
+  }
+  if (split[1].length === 1) {
+    split[1] = "0" + split[1];                                // 04
+  }
+  if (split[2].length === 4) {
+    split[2] = split[2].charAt(2) + split[2].charAt(3);       // 22
+  }
+  return Number(split[0] + split[1] + split[2]);              // 050422
 }
 
 
 // Date comes in formatted as 2022-04-11, this returns it formatted as 4.11.22
 function formatDate(date: string): string {
+  if (!date.includes("-")) return date;
+  
   const dateArr = date.split("-");
   const month = parseInt(dateArr[1]);   // parseInt removes '0' at beginning of string
   const day = parseInt(dateArr[2]);
