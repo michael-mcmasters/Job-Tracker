@@ -9,13 +9,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* background-color: #ADD9F4; */
-  /* background-color: #38bdf8; */
   background-color: #99f6e4   
-  /* background-color: #33333D; */
-  
-  /* ToDo: A background animation, where the color transitions and moves slowly would be nice */
-  /* Or do the cool wavy things from Fireship IO */
 }
 
 code {
