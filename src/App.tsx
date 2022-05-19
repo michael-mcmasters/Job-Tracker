@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import styles from './styles/App.module.css';
 import NewJob from './components/NewJobForm';
 import JobEntries from './components/Jobs';
 import PDFViewer from './components/PDFViewer';
@@ -15,7 +14,7 @@ function App() {
   }, [])
   
   return (
-    <div className={styles.App}>
+    <div>
       <BrowserRouter>
         <Routes>
             <Route path='/' element={
