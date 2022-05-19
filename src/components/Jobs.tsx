@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import JobEntry from './Job';
 import {default as JobType} from "../models/Job"
 import ClipLoader from "react-spinners/ClipLoader";
@@ -10,25 +10,26 @@ interface Props {
 
 const Job = (props: Props) => {
   
-  if (props.jobsArr.length === 0) {
-    return (
-      <div className="mx-auto mt-20 w-fit">
-        <ClipLoader size={150} />
-      </div>
-    )
-  }
+  const sortedJobsArr = useMemo(() => sortByAppliedDate(props.jobsArr), [props.jobsArr])
+  const isLoading = props.jobsArr.length === 0;
   
-  const sortedJobsArr = sortByAppliedDate(props.jobsArr);
   return (
     <>
-      {sortedJobsArr.map(j => (
-        <JobEntry
-          key={j.key}
-          job={j}
-        />
-      ))}
+      {isLoading
+        ?
+          <div className="mx-auto mt-20 w-fit">
+            <ClipLoader size={150} />
+          </div>
+        :
+          sortedJobsArr.map(j => (
+            <JobEntry
+              key={j.key}
+              job={j}
+            />
+          ))
+      }
     </>
-  );
+  )
 };
 
 
